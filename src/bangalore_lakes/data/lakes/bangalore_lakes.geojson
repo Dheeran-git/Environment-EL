@@ -1,0 +1,215 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "generated_at": "2026-04-17",
+    "source": "Hand-curated approximation; replace with OSM Overpass export (see PROVENANCE.md)",
+    "overpass_query_hash": null,
+    "schema_version": 1
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "bellandur",
+        "name": "Bellandur Lake",
+        "alt_names": [],
+        "ward": "Bellandur",
+        "bbmp_ward_no": 150,
+        "official_area_ha": 364.0,
+        "known_pollution_level": "severe",
+        "centroid": [77.6736, 12.9376],
+        "source": "approx",
+        "osm_id": null,
+        "last_verified": "2026-04-17",
+        "notes": "Largest lake in Bangalore. Chronic foam and fire incidents from untreated sewage discharge."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [77.6590, 12.9460],
+          [77.6655, 12.9470],
+          [77.6730, 12.9465],
+          [77.6800, 12.9445],
+          [77.6845, 12.9410],
+          [77.6855, 12.9370],
+          [77.6840, 12.9335],
+          [77.6795, 12.9315],
+          [77.6720, 12.9305],
+          [77.6645, 12.9310],
+          [77.6605, 12.9335],
+          [77.6590, 12.9380],
+          [77.6590, 12.9420],
+          [77.6590, 12.9460]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "varthur",
+        "name": "Varthur Lake",
+        "alt_names": [],
+        "ward": "Varthur",
+        "bbmp_ward_no": 149,
+        "official_area_ha": 220.0,
+        "known_pollution_level": "severe",
+        "centroid": [77.7414, 12.9398],
+        "source": "approx",
+        "osm_id": null,
+        "last_verified": "2026-04-17",
+        "notes": "Downstream of Bellandur; receives overflow. Also prone to foam and fire."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [77.7340, 12.9460],
+          [77.7410, 12.9475],
+          [77.7475, 12.9465],
+          [77.7495, 12.9430],
+          [77.7490, 12.9390],
+          [77.7475, 12.9355],
+          [77.7440, 12.9330],
+          [77.7395, 12.9325],
+          [77.7355, 12.9335],
+          [77.7330, 12.9365],
+          [77.7325, 12.9405],
+          [77.7335, 12.9440],
+          [77.7340, 12.9460]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "hebbal",
+        "name": "Hebbal Lake",
+        "alt_names": [],
+        "ward": "Hebbal",
+        "bbmp_ward_no": 21,
+        "official_area_ha": 75.0,
+        "known_pollution_level": "high",
+        "centroid": [77.5917, 13.0468],
+        "source": "approx",
+        "osm_id": null,
+        "last_verified": "2026-04-17",
+        "notes": "Adjacent to outer ring road and airport corridor. Subject to restoration efforts."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [77.5825, 13.0470],
+          [77.5870, 13.0490],
+          [77.5925, 13.0495],
+          [77.5975, 13.0490],
+          [77.5990, 13.0470],
+          [77.5985, 13.0450],
+          [77.5965, 13.0435],
+          [77.5925, 13.0430],
+          [77.5875, 13.0435],
+          [77.5840, 13.0445],
+          [77.5825, 13.0460],
+          [77.5825, 13.0470]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ulsoor",
+        "name": "Ulsoor Lake",
+        "alt_names": ["Halasuru Lake"],
+        "ward": "Halasuru",
+        "bbmp_ward_no": 92,
+        "official_area_ha": 50.0,
+        "known_pollution_level": "high",
+        "centroid": [77.6167, 12.9833],
+        "source": "approx",
+        "osm_id": null,
+        "last_verified": "2026-04-17",
+        "notes": "Central Bangalore, also known locally as Halasuru Lake. Irregular boat-shaped outline."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [77.6120, 12.9860],
+          [77.6155, 12.9870],
+          [77.6195, 12.9865],
+          [77.6220, 12.9845],
+          [77.6225, 12.9820],
+          [77.6215, 12.9800],
+          [77.6185, 12.9790],
+          [77.6150, 12.9795],
+          [77.6130, 12.9810],
+          [77.6120, 12.9830],
+          [77.6120, 12.9850],
+          [77.6120, 12.9860]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "sankey",
+        "name": "Sankey Tank",
+        "alt_names": ["Sankey Lake"],
+        "ward": "Malleswaram",
+        "bbmp_ward_no": 65,
+        "official_area_ha": 15.0,
+        "known_pollution_level": "moderate",
+        "centroid": [77.5715, 13.0067],
+        "source": "approx",
+        "osm_id": null,
+        "last_verified": "2026-04-17",
+        "notes": "Built 1882 as a water-supply tank; tagged water=tank in OSM. Relatively well-maintained."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [77.5685, 13.0090],
+          [77.5710, 13.0100],
+          [77.5740, 13.0095],
+          [77.5750, 13.0075],
+          [77.5745, 13.0055],
+          [77.5720, 13.0045],
+          [77.5695, 13.0050],
+          [77.5680, 13.0065],
+          [77.5682, 13.0080],
+          [77.5685, 13.0090]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "agara",
+        "name": "Agara Lake",
+        "alt_names": [],
+        "ward": "HSR Layout",
+        "bbmp_ward_no": 151,
+        "official_area_ha": 40.0,
+        "known_pollution_level": "moderate",
+        "centroid": [77.6422, 12.9239],
+        "source": "approx",
+        "osm_id": null,
+        "last_verified": "2026-04-17",
+        "notes": "Upstream of Bellandur in the Koramangala-Challaghatta valley. Recently restored."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [77.6380, 12.9270],
+          [77.6420, 12.9285],
+          [77.6460, 12.9280],
+          [77.6480, 12.9260],
+          [77.6475, 12.9230],
+          [77.6455, 12.9210],
+          [77.6415, 12.9200],
+          [77.6385, 12.9210],
+          [77.6375, 12.9235],
+          [77.6380, 12.9260],
+          [77.6380, 12.9270]
+        ]]
+      }
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+
+# Project — keep the directories via .gitkeep, ignore their contents
+outputs/*
+!outputs/.gitkeep
+credentials/*
+!credentials/.gitkeep
+.env
+.env.local
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
