@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}{{ lake.name }} &mdash; Bangalore Lakes{% endblock %}
+{% block content %}
+  <p><a href="/lakes">&larr; All lakes</a></p>
+  <h1>{{ lake.name }}</h1>
+  <p class="muted">
+    id: <code>{{ lake.id }}</code>
+    {% if lake.alt_names %} &middot; aka {{ lake.alt_names|join(", ") }}{% endif %}
+  </p>
+
+  <div class="two-col">
+    <div class="card">
+      <h2>Details</h2>
+      <dl>
+        <dt>Ward</dt><dd>{{ lake.ward or "—" }}</dd>
+        <dt>BBMP ward no</dt><dd>{{ lake.bbmp_ward_no or "—" }}</dd>
+        <dt>Official area</dt><dd>{% if lake.official_area_ha %}{{ "%.1f"|format(lake.official_area_ha) }} ha{% else %}—{% endif %}</dd>
+        <dt>Known pollution</dt>
+        <dd><span class="pill pill-{{ lake.known_pollution_level.value }}">{{ lake.known_pollution_level.value }}</span></dd>
+        <dt>Centroid (lon, lat)</dt><dd>{{ "%.5f"|format(lake.centroid[0]) }}, {{ "%.5f"|format(lake.centroid[1]) }}</dd>
+        <dt>Source</dt><dd>{{ lake.source }}</dd>
+        {% if lake.notes %}<dt>Notes</dt><dd>{{ lake.notes }}</dd>{% endif %}
+      </dl>
+    </div>
+    <div class="card">
+      <h2>Polygon</h2>
+      <div id="lake-map" class="map-medium"></div>
+    </div>
+  </div>
+
+  <section>
+    <h2>Cached Day 2 artifacts</h2>
+    {% if artifacts %}
+      <div class="card-grid">
+        {% for a in artifacts %}
+          <article class="lake-card">
+            <h3>{{ a.run_id }}</h3>
+            {% if a.thumb_url %}<p><img src="{{ a.thumb_url }}" alt="{{ lake.name }} thumbnail" class="thumb" /></p>{% endif %}
+            <ul class="muted">
+              {% if a.geotiff_url %}<li><a href="{{ a.geotiff_url }}">GeoTIFF</a></li>{% endif %}
+              {% if a.metadata_url %}<li><a href="{{ a.metadata_url }}">metadata.json</a></li>{% endif %}
+            </ul>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="muted">
+        No cached artifacts for this lake yet. Run
+        <code>bangalore-lakes fetch-lakes --lakes {{ lake.id }}</code>
+        (with valid Earth Engine credentials) to produce a clipped thumbnail and GeoTIFF.
+      </p>
+    {% endif %}
+  </section>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    (async function () {
+      const r = await fetch("/api/lakes");
+      if (!r.ok) return;
+      const payload = await r.json();
+      const mine = payload.lakes.find(function (l) { return l.id === "{{ lake.id }}"; });
+      if (!mine) return;
+      const map = L.map("lake-map").setView([mine.centroid[1], mine.centroid[0]], 14);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors"
+      }).addTo(map);
+      const layer = L.geoJSON(mine.geometry, {
+        style: { color: "#0b6bd5", weight: 2, fillOpacity: 0.4 }
+      }).addTo(map);
+      try { map.fitBounds(layer.getBounds(), { padding: [20, 20] }); } catch (e) {}
+    })();
+  </script>
+{% endblock %}

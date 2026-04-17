@@ -1,4 +1,4 @@
-.PHONY: install test test-integration lint fmt run-day1 run-day2 clean auth help
+.PHONY: install test test-integration lint fmt run-day1 run-day2 serve clean auth help
 
 PY ?= python
 PIP ?= $(PY) -m pip
@@ -12,6 +12,7 @@ help:
 	@echo "  fmt               ruff --fix + black"
 	@echo "  run-day1          bangalore-lakes hello-bangalore"
 	@echo "  run-day2          bangalore-lakes fetch-lakes"
+	@echo "  serve             Launch the web viewer at http://127.0.0.1:8000"
 	@echo "  auth              earthengine authenticate"
 	@echo "  clean             Remove build artifacts and outputs"
 
@@ -37,6 +38,9 @@ run-day1:
 
 run-day2:
 	bangalore-lakes fetch-lakes
+
+serve:
+	bangalore-lakes serve
 
 auth:
 	earthengine authenticate

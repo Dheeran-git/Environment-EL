@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}{{ phase }}/{{ run_id }} &mdash; Bangalore Lakes{% endblock %}
+{% block content %}
+  <p><a href="/runs">&larr; All runs</a></p>
+  <h1><span class="phase-badge phase-{{ phase }}">{{ phase }}</span> {{ run_id }}</h1>
+
+  {% if html_files %}
+    <section>
+      <h2>Interactive maps</h2>
+      {% for name in html_files %}
+        <div class="html-embed">
+          <div class="html-embed-header">
+            <strong>{{ name }}</strong>
+            <a href="{{ artifact_root }}/{{ name }}" target="_blank" rel="noopener">Open standalone &rarr;</a>
+          </div>
+          <iframe src="{{ artifact_root }}/{{ name }}" loading="lazy"></iframe>
+        </div>
+      {% endfor %}
+    </section>
+  {% endif %}
+
+  {% if lake_thumbs %}
+    <section>
+      <h2>Per-lake thumbnails</h2>
+      <div class="card-grid">
+        {% for t in lake_thumbs %}
+          <article class="lake-card">
+            <h3><a href="{{ t.detail_url }}">{{ t.lake_id }}</a></h3>
+            <img src="{{ t.thumb_url }}" alt="{{ t.lake_id }} thumbnail" class="thumb" />
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+  {% elif thumb_files %}
+    <section>
+      <h2>Thumbnails</h2>
+      <div class="card-grid">
+        {% for name in thumb_files %}
+          <article class="lake-card">
+            <h3>{{ name }}</h3>
+            <img src="{{ artifact_root }}/{{ name }}" alt="{{ name }}" class="thumb" />
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  {% if manifest %}
+    <section>
+      <h2>Manifest</h2>
+      <pre><code>{{ manifest|tojson(indent=2) }}</code></pre>
+    </section>
+  {% endif %}
+{% endblock %}

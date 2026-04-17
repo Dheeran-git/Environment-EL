@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Runs &mdash; Bangalore Lakes Viewer{% endblock %}
+{% block content %}
+  <h1>Pipeline runs</h1>
+  <p class="muted">Reading from <code>{{ output_root }}</code>.</p>
+
+  {% if runs %}
+    <table class="runs-table">
+      <thead>
+        <tr>
+          <th>Phase</th>
+          <th>Run id</th>
+          <th>HTML maps</th>
+          <th>Lakes</th>
+          <th>Manifest</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for run in runs %}
+          <tr>
+            <td><span class="phase-badge phase-{{ run.phase }}">{{ run.phase }}</span></td>
+            <td><a href="/runs/{{ run.phase }}/{{ run.run_id }}">{{ run.run_id }}</a></td>
+            <td>{{ run.html_files|length }}</td>
+            <td>{{ run.lake_ids|length }}</td>
+            <td>{% if run.has_manifest %}yes{% else %}—{% endif %}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No runs discovered. The viewer is live; generate artifacts with:</p>
+    <pre><code>bangalore-lakes hello-bangalore
+bangalore-lakes fetch-lakes</code></pre>
+  {% endif %}
+{% endblock %}

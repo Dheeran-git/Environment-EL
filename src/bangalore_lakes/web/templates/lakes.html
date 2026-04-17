@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Lakes &mdash; Bangalore Lakes Viewer{% endblock %}
+{% block content %}
+  <h1>Curated Lakes</h1>
+  <div id="lakes-map" class="map-large"></div>
+
+  <div class="card-grid">
+    {% for lake in lakes %}
+      <article class="lake-card">
+        <h3><a href="/lakes/{{ lake.id }}">{{ lake.name }}</a></h3>
+        <p class="muted">
+          {{ lake.id }}
+          {% if lake.alt_names %}&middot; aka {{ lake.alt_names|join(", ") }}{% endif %}
+        </p>
+        <dl>
+          <dt>Ward</dt><dd>{{ lake.ward or "—" }}</dd>
+          <dt>Area</dt><dd>{% if lake.official_area_ha %}{{ "%.1f"|format(lake.official_area_ha) }} ha{% else %}—{% endif %}</dd>
+          <dt>Pollution</dt>
+          <dd>
+            <span class="pill pill-{{ lake.known_pollution_level.value }}">
+              {{ lake.known_pollution_level.value }}
+            </span>
+          </dd>
+          <dt>Centroid</dt><dd>{{ "%.4f"|format(lake.centroid[0]) }}, {{ "%.4f"|format(lake.centroid[1]) }}</dd>
+        </dl>
+      </article>
+    {% endfor %}
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    (async function () {
+      const r = await fetch("/api/lakes");
+      if (!r.ok) return;
+      const payload = await r.json();
+      const map = L.map("lakes-map").setView([12.97, 77.60], 11);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors"
+      }).addTo(map);
+      const palette = {
+        unknown: "#8a8f98",
+        low: "#3ca653",
+        moderate: "#e0b400",
+        high: "#e06c00",
+        severe: "#c0293a"
+      };
+      const geojson = {
+        type: "FeatureCollection",
+        features: payload.lakes.map(function (l) {
+          return { type: "Feature", properties: l, geometry: l.geometry };
+        })
+      };
+      const layer = L.geoJSON(geojson, {
+        style: function (f) {
+          return {
+            color: palette[f.properties.known_pollution_level] || "#3388ff",
+            weight: 2,
+            fillOpacity: 0.5
+          };
+        },
+        onEachFeature: function (f, lyr) {
+          lyr.bindTooltip(f.properties.name, { permanent: false, sticky: true });
+          lyr.on("click", function () { window.location.href = "/lakes/" + f.properties.id; });
+        }
+      }).addTo(map);
+      try { map.fitBounds(layer.getBounds(), { padding: [20, 20] }); } catch (e) {}
+    })();
+  </script>
+{% endblock %}

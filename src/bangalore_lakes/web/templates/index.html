@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Bangalore Lakes Viewer{% endblock %}
+{% block content %}
+  <section class="hero">
+    <h1>Bangalore Lakes &mdash; Water Quality Viewer</h1>
+    <p>
+      Curated registry of {{ lakes|length }} lakes with validated GeoJSON polygons,
+      plus a browser for cached Sentinel-2 pipeline runs.
+    </p>
+  </section>
+
+  <section class="two-col">
+    <div class="card">
+      <h2>Lakes</h2>
+      <p class="muted">Registry schema v{{ metadata.get("schema_version") or 1 }}.</p>
+      <div id="overview-map" class="map-small"></div>
+      <p><a class="btn" href="/lakes">Browse all lakes &rarr;</a></p>
+    </div>
+
+    <div class="card">
+      <h2>Runs</h2>
+      {% if runs %}
+        <p class="muted">{{ runs|length }} run(s) in <code>{{ output_root }}</code>.</p>
+        <ul class="runs-list">
+          {% for run in runs[:10] %}
+            <li>
+              <a href="/runs/{{ run.phase }}/{{ run.run_id }}">
+                <span class="phase-badge phase-{{ run.phase }}">{{ run.phase }}</span>
+                {{ run.run_id }}
+              </a>
+              {% if run.lake_ids %}
+                <span class="muted">&middot; {{ run.lake_ids|length }} lakes</span>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="muted">No runs yet.</p>
+        <p>Run <code>bangalore-lakes hello-bangalore</code> (Day 1) or
+          <code>bangalore-lakes fetch-lakes</code> (Day 2) with valid Earth
+          Engine credentials to populate <code>{{ output_root }}</code>.</p>
+      {% endif %}
+      <p><a class="btn" href="/runs">All runs &rarr;</a></p>
+    </div>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    (async function () {
+      const r = await fetch("/api/lakes");
+      if (!r.ok) return;
+      const payload = await r.json();
+      const map = L.map("overview-map", { zoomControl: true }).setView([12.97, 77.60], 11);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors"
+      }).addTo(map);
+      const geojson = {
+        type: "FeatureCollection",
+        features: payload.lakes.map(function (l) {
+          return {
+            type: "Feature",
+            properties: l,
+            geometry: l.geometry
+          };
+        })
+      };
+      const layer = L.geoJSON(geojson, {
+        style: function (f) {
+          const lvl = (f.properties && f.properties.known_pollution_level) || "unknown";
+          const palette = {
+            unknown: "#8a8f98",
+            low: "#3ca653",
+            moderate: "#e0b400",
+            high: "#e06c00",
+            severe: "#c0293a"
+          };
+          return { color: palette[lvl] || "#3388ff", weight: 2, fillOpacity: 0.45 };
+        },
+        onEachFeature: function (f, lyr) {
+          lyr.bindPopup(
+            "<strong>" + f.properties.name + "</strong><br/>" +
+            "Pollution: " + f.properties.known_pollution_level + "<br/>" +
+            "<a href=\"/lakes/" + f.properties.id + "\">Detail &rarr;</a>"
+          );
+        }
+      }).addTo(map);
+      try { map.fitBounds(layer.getBounds(), { padding: [20, 20] }); } catch (e) {}
+    })();
+  </script>
+{% endblock %}

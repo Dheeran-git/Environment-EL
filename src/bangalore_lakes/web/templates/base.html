@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{% block title %}Bangalore Lakes Viewer{% endblock %}</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+    <link rel="stylesheet" href="/static/site.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/">Bangalore Lakes</a>
+      <nav>
+        <a href="/lakes">Lakes</a>
+        <a href="/runs">Runs</a>
+        <a href="/api/lakes">API</a>
+      </nav>
+      <span class="version">v{{ version }}</span>
+    </header>
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+    <footer class="bottom">
+      Satellite-derived water quality prototype. Sentinel-2 L2A over Bangalore.
+    </footer>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

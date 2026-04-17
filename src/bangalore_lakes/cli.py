@@ -157,5 +157,31 @@ def fetch_lakes_cmd(
     )
 
 
+@app.command("serve")
+def serve_cmd(
+    host: str = typer.Option("127.0.0.1", "--host", help="Bind address."),
+    port: int = typer.Option(8000, "--port", help="TCP port."),
+    reload: bool = typer.Option(False, "--reload", help="Auto-reload on code changes (dev)."),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable debug logging."),
+) -> None:
+    """Run the web viewer (FastAPI + Leaflet) over the lake registry and cached runs."""
+    settings = get_settings()
+    configure_logging("DEBUG" if verbose else settings.log_level, json=settings.log_json)
+
+    import uvicorn
+
+    console.print(
+        f"[green]Starting Bangalore Lakes viewer[/green] on " f"[bold]http://{host}:{port}[/bold]"
+    )
+    uvicorn.run(
+        "bangalore_lakes.web:create_app",
+        host=host,
+        port=port,
+        reload=reload,
+        factory=True,
+        log_level="debug" if verbose else "info",
+    )
+
+
 if __name__ == "__main__":
     app()
