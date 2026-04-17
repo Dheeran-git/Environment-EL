@@ -14,7 +14,7 @@ package without refactoring.
 ## Quickstart
 
 ```bash
-# 1. Install (Python 3.11 or 3.12)
+# 1. Install (Python 3.11, 3.12, or 3.13)
 make install
 
 # 2. One-time: authenticate with Earth Engine
@@ -92,7 +92,7 @@ make test-integration     # real GEE round-trip; requires EE_TEST_AUTH=1
 make lint                 # ruff + black --check
 ```
 
-CI runs unit tests on Python 3.11 and 3.12 against every push to the branch.
+CI runs unit tests on Python 3.11, 3.12, and 3.13 against every push to the branch.
 
 ## Configuration
 
