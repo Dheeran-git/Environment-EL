@@ -2,7 +2,14 @@
 {% block title %}Lakes &mdash; Bangalore Lakes Viewer{% endblock %}
 {% block content %}
   <h1>Curated Lakes</h1>
+  <div class="map-toolbar">
+    <div class="basemap-toggle" role="group" aria-label="Basemap">
+      <button type="button" data-basemap="osm" class="active">Street</button>
+      <button type="button" data-basemap="sat">Satellite</button>
+    </div>
+  </div>
   <div id="lakes-map" class="map-large"></div>
+  <p id="lakes-map-status" class="muted" hidden></p>
 
   <div class="card-grid">
     {% for lake in lakes %}
@@ -31,20 +38,51 @@
 {% block scripts %}
   <script>
     (async function () {
-      const r = await fetch("/api/lakes");
-      if (!r.ok) return;
-      const payload = await r.json();
+      const status = document.getElementById("lakes-map-status");
+      const setStatus = function (msg, isError) {
+        status.hidden = false;
+        status.textContent = msg;
+        status.classList.toggle("error", !!isError);
+      };
+      if (typeof L === "undefined") {
+        setStatus("Leaflet failed to load. Check that unpkg.com is reachable.", true);
+        return;
+      }
+      let payload;
+      try {
+        const r = await fetch("/api/lakes");
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        payload = await r.json();
+      } catch (err) {
+        setStatus("Couldn't reach /api/lakes: " + err.message, true);
+        return;
+      }
+
       const map = L.map("lakes-map").setView([12.97, 77.60], 11);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: "&copy; OpenStreetMap contributors"
-      }).addTo(map);
+      const basemaps = {
+        osm: L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 19, attribution: "&copy; OpenStreetMap contributors"
+        }),
+        sat: L.tileLayer(
+          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+          { maxZoom: 19, attribution: "Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics" }
+        )
+      };
+      basemaps.osm.addTo(map);
+      document.querySelectorAll(".basemap-toggle button").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const key = btn.dataset.basemap;
+          Object.keys(basemaps).forEach(function (k) { map.removeLayer(basemaps[k]); });
+          basemaps[key].addTo(map);
+          document.querySelectorAll(".basemap-toggle button").forEach(function (b) {
+            b.classList.toggle("active", b === btn);
+          });
+        });
+      });
+
       const palette = {
-        unknown: "#8a8f98",
-        low: "#3ca653",
-        moderate: "#e0b400",
-        high: "#e06c00",
-        severe: "#c0293a"
+        unknown: "#8a8f98", low: "#3ca653", moderate: "#e0b400",
+        high: "#e06c00", severe: "#c0293a"
       };
       const geojson = {
         type: "FeatureCollection",
@@ -56,8 +94,7 @@
         style: function (f) {
           return {
             color: palette[f.properties.known_pollution_level] || "#3388ff",
-            weight: 2,
-            fillOpacity: 0.5
+            weight: 2, fillOpacity: 0.5
           };
         },
         onEachFeature: function (f, lyr) {
@@ -66,6 +103,7 @@
         }
       }).addTo(map);
       try { map.fitBounds(layer.getBounds(), { padding: [20, 20] }); } catch (e) {}
+      setTimeout(function () { map.invalidateSize(); }, 50);
     })();
   </script>
 {% endblock %}

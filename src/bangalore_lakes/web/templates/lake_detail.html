@@ -56,20 +56,25 @@
 {% block scripts %}
   <script>
     (async function () {
-      const r = await fetch("/api/lakes");
-      if (!r.ok) return;
-      const payload = await r.json();
+      if (typeof L === "undefined") return;
+      let payload;
+      try {
+        const r = await fetch("/api/lakes");
+        if (!r.ok) return;
+        payload = await r.json();
+      } catch (e) { return; }
       const mine = payload.lakes.find(function (l) { return l.id === "{{ lake.id }}"; });
       if (!mine) return;
       const map = L.map("lake-map").setView([mine.centroid[1], mine.centroid[0]], 14);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: "&copy; OpenStreetMap contributors"
-      }).addTo(map);
+      L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        { maxZoom: 19, attribution: "Tiles &copy; Esri" }
+      ).addTo(map);
       const layer = L.geoJSON(mine.geometry, {
-        style: { color: "#0b6bd5", weight: 2, fillOpacity: 0.4 }
+        style: { color: "#ffd84d", weight: 2, fillOpacity: 0.25 }
       }).addTo(map);
       try { map.fitBounds(layer.getBounds(), { padding: [20, 20] }); } catch (e) {}
+      setTimeout(function () { map.invalidateSize(); }, 50);
     })();
   </script>
 {% endblock %}

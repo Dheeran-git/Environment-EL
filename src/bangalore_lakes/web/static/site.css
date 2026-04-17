@@ -182,3 +182,49 @@ pre { background: #1e2430; color: #d6e3ff; padding: 1rem; border-radius: 8px; ov
 pre code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.85rem; }
 code { background: #eef2f7; padding: 0.08rem 0.28rem; border-radius: 4px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.88em; }
 pre code { background: transparent; padding: 0; }
+
+.status-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.card + .card { margin-top: 1.25rem; }
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.card-header h2 { margin: 0; }
+
+.map-toolbar { display: flex; justify-content: flex-end; margin: 0.5rem 0; }
+
+.basemap-toggle {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--card);
+}
+.basemap-toggle button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0.35rem 0.85rem;
+  font: inherit;
+  color: var(--fg);
+  cursor: pointer;
+}
+.basemap-toggle button + button { border-left: 1px solid var(--border); }
+.basemap-toggle button.active { background: var(--accent); color: white; }
+.basemap-toggle button:not(.active):hover { background: var(--bg); }
+
+.muted.error { color: var(--severe); }
+
+.onboard { padding-left: 1.25rem; }
+.onboard li { margin: 0.5rem 0; }
+.onboard pre { margin: 0.35rem 0 0; }

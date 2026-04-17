@@ -65,6 +65,15 @@ bangalore-lakes fetch-lakes           # Day 2: per-lake clipped PNG + GeoTIFF
 bangalore-lakes serve                 # Web viewer at http://127.0.0.1:8000
 ```
 
+If the installed scripts directory isn't on your `PATH` (common on Windows with
+`pip install --user`), every subcommand is also reachable via the module
+runner:
+
+```
+python -m bangalore_lakes serve
+python -m bangalore_lakes list-lakes
+```
+
 All commands accept `--days`, `--cloud-pct`, `--output-dir`, and `--verbose`.
 `fetch-lakes` additionally accepts `--lakes <id>` (repeatable), `--scale`, and
 `--skip-geotiff`. Run any command with `--help` for full options.
