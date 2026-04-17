@@ -55,7 +55,7 @@ def safe_host_context() -> dict[str, Any]:
     """Non-sensitive host metadata for run manifests."""
     return {
         "user": os.environ.get("USER") or os.environ.get("LOGNAME"),
-        "pwd": str(Path.cwd()),
+        "pwd": Path.cwd().as_posix(),
         "package_version": package_version(),
         "git_sha": git_sha(),
     }

@@ -210,14 +210,16 @@ def run_fetch_lakes(
             "lakes": [
                 {
                     "id": art.lake_id,
-                    "dir": str(art.dir.relative_to(run_dir)),
-                    "thumb_png": str(art.thumb_png.relative_to(run_dir)),
-                    "geotiff": (str(art.geotiff.relative_to(run_dir)) if art.geotiff else None),
-                    "metadata": str(art.metadata.relative_to(run_dir)),
+                    "dir": art.dir.relative_to(run_dir).as_posix(),
+                    "thumb_png": art.thumb_png.relative_to(run_dir).as_posix(),
+                    "geotiff": (
+                        art.geotiff.relative_to(run_dir).as_posix() if art.geotiff else None
+                    ),
+                    "metadata": art.metadata.relative_to(run_dir).as_posix(),
                 }
                 for art in lake_artifacts
             ],
-            "overlay_html": str(overlay_html.relative_to(run_dir)),
+            "overlay_html": overlay_html.relative_to(run_dir).as_posix(),
             "gee_project_id": init_info.project_id,
             "gee_account": init_info.account,
             "composite": {

@@ -99,8 +99,8 @@ def run_hello_bangalore(
         "gee_project_id": init_info.project_id,
         "gee_account": init_info.account,
         "artifacts": {
-            "html": str(html_path.relative_to(run_dir)),
-            "thumb_png": str(thumb_path.relative_to(run_dir)),
+            "html": html_path.relative_to(run_dir).as_posix(),
+            "thumb_png": thumb_path.relative_to(run_dir).as_posix(),
             "thumb_png_sha256": thumb_artifact.sha256,
             "thumb_png_bytes": thumb_artifact.size_bytes,
         },

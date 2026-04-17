@@ -92,12 +92,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.mount("/static", StaticFiles(directory=str(_static_dir())), name="static")
 
     output_root = settings.output_dir.resolve()
-    if output_root.exists():
-        app.mount(
-            "/artifacts",
-            StaticFiles(directory=str(output_root), html=True),
-            name="artifacts",
-        )
+    output_root.mkdir(parents=True, exist_ok=True)
+    app.mount(
+        "/artifacts",
+        StaticFiles(directory=str(output_root), html=True),
+        name="artifacts",
+    )
 
     @app.get("/", response_class=HTMLResponse)
     def index(request: Request) -> HTMLResponse:
@@ -110,7 +110,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 "runs": runs,
                 "version": __version__,
                 "metadata": collection.metadata.model_dump(),
-                "output_root": str(output_root),
+                "output_root": output_root.as_posix(),
             },
         )
 
@@ -178,7 +178,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             {
                 "runs": _list_runs(output_root),
                 "version": __version__,
-                "output_root": str(output_root),
+                "output_root": output_root.as_posix(),
             },
         )
 
@@ -240,7 +240,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     def api_runs() -> JSONResponse:
         return JSONResponse(
             {
-                "output_root": str(output_root),
+                "output_root": output_root.as_posix(),
                 "runs": [
                     {
                         "phase": run.phase,
@@ -261,7 +261,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             "status": "ok",
             "version": __version__,
             "lake_count": len(collection.lakes),
-            "output_root": str(output_root),
+            "output_root": output_root.as_posix(),
             "output_root_exists": output_root.exists(),
         }
 
