@@ -55,6 +55,14 @@ class Settings(BaseSettings):
     log_level: str = Field(default="INFO")
     log_json: bool = Field(default=False)
 
+    cors_origins: str = Field(
+        default="*",
+        description=(
+            "Comma-separated list of allowed browser origins for the FastAPI API. "
+            "Use '*' for open dev, or e.g. 'https://bangalore-lakes.vercel.app' in prod."
+        ),
+    )
+
     bangalore_center_lon: float = Field(default=77.5946)
     bangalore_center_lat: float = Field(default=12.9716)
     bangalore_bbox_halfwidth_deg: float = Field(default=0.15, gt=0.0)

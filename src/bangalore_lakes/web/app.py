@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -146,6 +147,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         title="Bangalore Lakes Water Quality Viewer",
         version=__version__,
         description="Browse curated lake polygons and cached Sentinel-2 run artifacts.",
+    )
+
+    origins = [o.strip() for o in settings.cors_origins.split(",") if o.strip()]
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins or ["*"],
+        allow_methods=["GET"],
+        allow_headers=["*"],
     )
 
     templates = Jinja2Templates(directory=str(_templates_dir()))
