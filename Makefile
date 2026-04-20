@@ -1,4 +1,4 @@
-.PHONY: install test test-integration lint fmt run-day1 run-day2 run-timeseries run-insights serve clean auth help
+.PHONY: install test test-integration lint fmt run-day1 run-day2 run-timeseries run-insights serve clean auth help frontend-install frontend-dev frontend-build
 
 PY ?= python
 PIP ?= $(PY) -m pip
@@ -15,6 +15,9 @@ help:
 	@echo "  run-timeseries    bangalore-lakes compute-timeseries"
 	@echo "  run-insights      bangalore-lakes compute-insights --analytics-run-dir ..."
 	@echo "  serve             Launch the web viewer at http://127.0.0.1:8000"
+	@echo "  frontend-install  Install React frontend deps (npm install in frontend/)"
+	@echo "  frontend-dev      Run React frontend dev server at http://localhost:5173"
+	@echo "  frontend-build    Build the React frontend for production"
 	@echo "  auth              earthengine authenticate"
 	@echo "  clean             Remove build artifacts and outputs"
 
@@ -50,6 +53,15 @@ run-insights:
 
 serve:
 	bangalore-lakes serve
+
+frontend-install:
+	cd frontend && npm install
+
+frontend-dev:
+	cd frontend && npm run dev
+
+frontend-build:
+	cd frontend && npm run build
 
 auth:
 	earthengine authenticate

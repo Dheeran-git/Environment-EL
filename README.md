@@ -60,6 +60,44 @@ It works without Earth Engine credentials — you can browse the lake registry
 immediately, and cached run artifacts appear as soon as `hello-bangalore` or
 `fetch-lakes` has produced them.
 
+## React frontend (Week 2)
+
+A separate React + Vite + TypeScript SPA lives under [`frontend/`](frontend/),
+styled with a Linear-inspired dark theme (Tailwind, Inter, JetBrains Mono).
+It consumes the same JSON API the Jinja2 viewer uses.
+
+```bash
+# One-time
+make frontend-install
+
+# Dev: two terminals
+make serve                 # FastAPI at :8000 (backend)
+make frontend-dev          # Vite dev server at :5173 (proxies /api to :8000)
+
+# Production build
+make frontend-build        # emits frontend/dist/
+```
+
+Features:
+
+- **Dashboard** (`/`) — Leaflet map of all six lakes, color-coded by latest
+  pollution score; ranked list with MoM anomaly badges; hover-to-highlight
+  between map and list.
+- **Lake detail** (`/lakes/:id`) — stat tiles, verdict card, Recharts trend
+  line 2020→now, dashed red `<ReferenceLine>` for each restoration event,
+  red dots for >20% MoM anomalies.
+- **Methodology** (`/methodology`) — one-page write-up of indices, scoring
+  weights, anomaly rule, and verdict heuristic.
+
+## Deployment
+
+- **Backend** → Render via [`render.yaml`](render.yaml) at the repo root.
+  Exposes the FastAPI app; set `BLWQ_CORS_ORIGINS` to your Vercel URL.
+- **Frontend** → Vercel via [`frontend/vercel.json`](frontend/vercel.json).
+  Set project root to `frontend/`, env var `VITE_API_BASE` to the Render URL.
+
+See [`docs/demo.md`](docs/demo.md) for a 90-second demo walkthrough script.
+
 ## CLI
 
 ```
