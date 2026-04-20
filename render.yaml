@@ -10,7 +10,7 @@ services:
       - key: PYTHON_VERSION
         value: 3.12.7
       - key: BLWQ_CORS_ORIGINS
-        value: https://bangalore-lakes.vercel.app
+        value: https://environment-el.vercel.app
       - key: BLWQ_OUTPUT_DIR
         value: /opt/render/project/src/outputs
       - key: BLWQ_LOG_LEVEL
