@@ -5,11 +5,11 @@ Sentinel-2 imagery for six named lakes — **Bellandur, Varthur, Hebbal, Ulsoor,
 Sankey, Agara** — and produces clipped imagery for downstream water-quality
 analysis.
 
-This repository covers **Day 1 + Day 2** of the Week 1 roadmap: a production-quality
-GEE data pipeline that renders an interactive Bangalore-wide Sentinel-2 composite
-and exports per-lake PNG + GeoTIFF clips. Spectral indices, pollution scoring,
-and the Flask/React dashboard are scoped for Day 3+ and slot into the same
-package without refactoring.
+This repository covers **Day 1 + Day 2 + analytics extensions** of the Week 1 roadmap:
+a production-quality GEE data pipeline that renders an interactive Bangalore-wide
+Sentinel-2 composite, exports per-lake PNG + GeoTIFF clips, computes monthly
+spectral-index time series from 2020 onward, and derives anomaly/restoration
+insights.
 
 ## Quickstart
 
@@ -34,7 +34,11 @@ make run-day1
 # 6. Day 2: per-lake clipped exports -> outputs/day2/<run_id>/
 make run-day2
 
-# 7. Browse everything in a local web viewer -> http://127.0.0.1:8000
+# 7. Build monthly analytics and insights (2020-now)
+bangalore-lakes compute-timeseries
+bangalore-lakes compute-insights --analytics-run-dir outputs/analytics/<run_id>
+
+# 8. Browse everything in a local web viewer -> http://127.0.0.1:8000
 make serve
 ```
 
@@ -49,6 +53,7 @@ or use the built-in web viewer.
 - lists every run under `outputs/day1/**` and `outputs/day2/**`,
 - embeds the generated `*.html` maps as iframes and thumbnails as images,
 - exposes `/api/lakes` and `/api/runs` as JSON for downstream tooling,
+- exposes `/api/timeseries/{lake_id}` and `/api/restoration-events/{lake_id}`,
 - serves raw artifacts under `/artifacts/...` so GeoTIFFs/metadata stay downloadable.
 
 It works without Earth Engine credentials — you can browse the lake registry
@@ -62,6 +67,8 @@ bangalore-lakes check-auth            # verifies ee.Initialize() + round-trip
 bangalore-lakes list-lakes            # prints curated lake registry
 bangalore-lakes hello-bangalore       # Day 1: Bangalore S2 composite + HTML map
 bangalore-lakes fetch-lakes           # Day 2: per-lake clipped PNG + GeoTIFF
+bangalore-lakes compute-timeseries    # Monthly NDWI/NDVI/NDTI + pollution score
+bangalore-lakes compute-insights      # MoM anomalies + restoration verdict
 bangalore-lakes serve                 # Web viewer at http://127.0.0.1:8000
 ```
 
@@ -74,9 +81,11 @@ python -m bangalore_lakes serve
 python -m bangalore_lakes list-lakes
 ```
 
-All commands accept `--days`, `--cloud-pct`, `--output-dir`, and `--verbose`.
-`fetch-lakes` additionally accepts `--lakes <id>` (repeatable), `--scale`, and
-`--skip-geotiff`. Run any command with `--help` for full options.
+`hello-bangalore` and `fetch-lakes` accept `--days`, `--cloud-pct`, and
+`--output-dir`; `fetch-lakes` additionally accepts `--lakes <id>` (repeatable),
+`--scale`, and `--skip-geotiff`. `compute-timeseries` accepts `--start-year`,
+`--lakes`, `--cloud-pct`, `--scale`, and `--output-dir`.
+Run any command with `--help` for full options.
 
 ## Architecture
 
@@ -85,6 +94,8 @@ All commands accept `--days`, `--cloud-pct`, `--output-dir`, and `--verbose`.
 - `src/bangalore_lakes/lakes/` — pydantic-validated `Lake` model and the bundled
   GeoJSON registry loader.
 - `src/bangalore_lakes/maps/` — `geemap.Map` builders for Day 1 + Day 2.
+- `src/bangalore_lakes/analytics/` — spectral indices, scoring, anomaly and verdict logic.
+- `src/bangalore_lakes/restoration/` — restoration events registry and validation.
 - `src/bangalore_lakes/commands/` — orchestration for each CLI subcommand.
 - `src/bangalore_lakes/web/` — FastAPI viewer (templates, static, app factory).
 - `src/bangalore_lakes/data/lakes/bangalore_lakes.geojson` — curated OSM-derived
@@ -126,6 +137,18 @@ override env vars.
 - `multi_lake_overlay.html` — toggleable interactive map for all lakes
 - `run_manifest.json` — index of every artifact
 - `run.log`
+
+### Analytics — `outputs/analytics/<run_id>/`
+
+- `all_lakes_monthly.csv` — consolidated monthly time series for all processed lakes
+- `lakes/<id>/monthly_timeseries.json` — per-lake monthly NDWI/NDVI/NDTI + score
+- `timeseries_manifest.json` — run metadata and artifact index
+- `insights_manifest.json` — anomaly counts + restoration verdict summaries
+
+## Methodology
+
+See [`docs/methodology.md`](docs/methodology.md) for formulas, scoring assumptions,
+anomaly thresholding, and restoration-verdict logic.
 
 ## Monsoon note
 

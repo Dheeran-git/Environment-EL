@@ -119,6 +119,13 @@ bangalore-lakes fetch-lakes       # Day 2: per-lake clips</code></pre>
         unknown: "#8a8f98", low: "#3ca653", moderate: "#e0b400",
         high: "#e06c00", severe: "#c0293a"
       };
+      const scoreToLevel = function (score, fallback) {
+        if (score === null || score === undefined) return fallback || "unknown";
+        if (score < 25) return "low";
+        if (score < 50) return "moderate";
+        if (score < 75) return "high";
+        return "severe";
+      };
       const geojson = {
         type: "FeatureCollection",
         features: payload.lakes.map(function (l) {
@@ -127,13 +134,17 @@ bangalore-lakes fetch-lakes       # Day 2: per-lake clips</code></pre>
       };
       const layer = L.geoJSON(geojson, {
         style: function (f) {
-          const lvl = (f.properties && f.properties.known_pollution_level) || "unknown";
+          const lvl = scoreToLevel(
+            f.properties && f.properties.computed_pollution_score,
+            (f.properties && f.properties.known_pollution_level) || "unknown"
+          );
           return { color: palette[lvl] || "#3388ff", weight: 2, fillOpacity: 0.45 };
         },
         onEachFeature: function (f, lyr) {
+          const score = f.properties.computed_pollution_score;
           lyr.bindPopup(
             "<strong>" + f.properties.name + "</strong><br/>" +
-            "Pollution: " + f.properties.known_pollution_level + "<br/>" +
+            "Pollution: " + (score === null || score === undefined ? f.properties.known_pollution_level : score.toFixed(2) + "/100") + "<br/>" +
             "<a href=\"/lakes/" + f.properties.id + "\">Detail &rarr;</a>"
           );
         }

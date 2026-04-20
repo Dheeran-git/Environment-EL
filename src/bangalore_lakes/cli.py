@@ -183,5 +183,59 @@ def serve_cmd(
     )
 
 
+@app.command("compute-timeseries")
+def compute_timeseries_cmd(
+    lakes: list[str] = typer.Option(
+        None,
+        "--lakes",
+        help="Lake id(s) to process (repeatable). Defaults to all registered lakes.",
+    ),
+    start_year: int = typer.Option(None, "--start-year", help="First year for monthly history."),
+    cloud_pct: float = typer.Option(None, "--cloud-pct", help="Cloud percentage threshold."),
+    scale: int = typer.Option(None, "--scale", help="Export/aggregation scale in meters/pixel."),
+    output_dir: Path = typer.Option(None, "--output-dir", help="Output root."),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable debug logging."),
+) -> None:
+    """Compute monthly NDWI/NDVI/NDTI-derived pollution scores from 2020 onwards."""
+    settings = get_settings()
+    configure_logging("DEBUG" if verbose else settings.log_level, json=settings.log_json)
+
+    from bangalore_lakes.commands.compute_timeseries import run_compute_timeseries
+
+    result = run_compute_timeseries(
+        settings=settings,
+        lake_ids=lakes or None,
+        start_year=start_year if start_year is not None else settings.analytics_start_year,
+        cloud_pct=cloud_pct if cloud_pct is not None else settings.default_cloud_pct,
+        scale_m=scale if scale is not None else settings.default_scale_m,
+        output_dir=output_dir if output_dir is not None else settings.output_dir,
+    )
+    console.print(
+        "[green]Analytics complete.[/green] "
+        f"Run: [bold]{result.run_dir}[/bold] CSV: [bold]{result.csv_path}[/bold]"
+    )
+
+
+@app.command("compute-insights")
+def compute_insights_cmd(
+    analytics_run_dir: Path = typer.Option(
+        ...,
+        "--analytics-run-dir",
+        help="Path to a run under outputs/analytics/<run_id>/",
+    ),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable debug logging."),
+) -> None:
+    """Compute anomalies and restoration verdicts for an analytics run."""
+    settings = get_settings()
+    configure_logging("DEBUG" if verbose else settings.log_level, json=settings.log_json)
+
+    from bangalore_lakes.commands.compute_insights import run_compute_insights
+
+    result = run_compute_insights(analytics_run_dir=analytics_run_dir)
+    console.print(
+        "[green]Insights complete.[/green] " f"Manifest: [bold]{result.manifest_path}[/bold]"
+    )
+
+
 if __name__ == "__main__":
     app()

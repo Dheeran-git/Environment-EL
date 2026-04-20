@@ -108,3 +108,16 @@ def test_healthz(client: TestClient) -> None:
     data = response.json()
     assert data["status"] == "ok"
     assert data["lake_count"] >= 6
+
+
+def test_api_restoration_events(client: TestClient) -> None:
+    response = client.get("/api/restoration-events/bellandur")
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["lake_id"] == "bellandur"
+    assert isinstance(payload["events"], list)
+
+
+def test_api_timeseries_404_without_analytics(client: TestClient) -> None:
+    response = client.get("/api/timeseries/bellandur")
+    assert response.status_code == 404

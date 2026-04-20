@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
+from datetime import date
 from importlib import resources
 from pathlib import Path
 from typing import Any
@@ -14,8 +15,10 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from bangalore_lakes import __version__
+from bangalore_lakes.analytics.timeseries import LakeMonthlyObservation
 from bangalore_lakes.config import Settings, get_settings
 from bangalore_lakes.lakes import Lake, load_collection
+from bangalore_lakes.restoration.registry import events_for_lake
 
 
 @dataclass(frozen=True)
@@ -31,6 +34,61 @@ class RunEntry:
     lake_ids: list[str]
 
 
+def _read_lake_timeseries(path: Path) -> list[LakeMonthlyObservation]:
+    if not path.exists():
+        return []
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    result: list[LakeMonthlyObservation] = []
+    for row in payload:
+        result.append(
+            LakeMonthlyObservation(
+                lake_id=row["lake_id"],
+                month_start=date.fromisoformat(row["month_start"]),
+                month_end=date.fromisoformat(row["month_end"]),
+                ndwi=float(row["ndwi"]),
+                ndvi=float(row["ndvi"]),
+                ndti=float(row["ndti"]),
+                pollution_score=float(row["pollution_score"]),
+                pixel_count=int(row.get("pixel_count", 0)),
+                scene_count=int(row.get("scene_count", 0)),
+                anomaly_flag=bool(row.get("anomaly_flag", False)),
+                mom_change_pct=(
+                    float(row["mom_change_pct"]) if row.get("mom_change_pct") is not None else None
+                ),
+                restoration_verdict=row.get("restoration_verdict"),
+                restoration_confidence=(
+                    float(row["restoration_confidence"])
+                    if row.get("restoration_confidence") is not None
+                    else None
+                ),
+            )
+        )
+    return result
+
+
+def _latest_analytics_dir(output_root: Path) -> Path | None:
+    analytics_root = output_root / "analytics"
+    if not analytics_root.is_dir():
+        return None
+    dirs = sorted([p for p in analytics_root.iterdir() if p.is_dir()], reverse=True)
+    return dirs[0] if dirs else None
+
+
+def _latest_score_by_lake(output_root: Path) -> dict[str, float]:
+    latest = _latest_analytics_dir(output_root)
+    if latest is None:
+        return {}
+    scores: dict[str, float] = {}
+    lakes_root = latest / "lakes"
+    if not lakes_root.is_dir():
+        return {}
+    for lake_dir in [p for p in lakes_root.iterdir() if p.is_dir()]:
+        data = _read_lake_timeseries(lake_dir / "monthly_timeseries.json")
+        if data:
+            scores[lake_dir.name] = data[-1].pollution_score
+    return scores
+
+
 def _templates_dir() -> Path:
     return Path(str(resources.files("bangalore_lakes.web").joinpath("templates")))
 
@@ -44,7 +102,7 @@ def _list_runs(output_root: Path) -> list[RunEntry]:
     runs: list[RunEntry] = []
     if not output_root.exists():
         return runs
-    for phase in ("day1", "day2"):
+    for phase in ("day1", "day2", "analytics"):
         phase_dir = output_root / phase
         if not phase_dir.is_dir():
             continue
@@ -74,7 +132,9 @@ def _list_runs(output_root: Path) -> list[RunEntry]:
 
 def _lake_public_dict(lake: Lake) -> dict[str, Any]:
     """JSON-safe projection of a Lake (dates become ISO strings)."""
-    return lake.model_dump(mode="json")
+    data = lake.model_dump(mode="json")
+    data["computed_pollution_score"] = None
+    return data
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -102,6 +162,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.get("/", response_class=HTMLResponse)
     def index(request: Request) -> HTMLResponse:
         runs = _list_runs(output_root)
+        latest_scores = _latest_score_by_lake(output_root)
         return templates.TemplateResponse(
             request,
             "index.html",
@@ -111,17 +172,20 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 "version": __version__,
                 "metadata": collection.metadata.model_dump(),
                 "output_root": output_root.as_posix(),
+                "latest_scores": latest_scores,
             },
         )
 
     @app.get("/lakes", response_class=HTMLResponse)
     def lakes_page(request: Request) -> HTMLResponse:
+        latest_scores = _latest_score_by_lake(output_root)
         return templates.TemplateResponse(
             request,
             "lakes.html",
             {
                 "lakes": collection.lakes,
                 "version": __version__,
+                "latest_scores": latest_scores,
             },
         )
 
@@ -167,6 +231,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 "lake": lake,
                 "artifacts": artifacts,
                 "version": __version__,
+                "restoration_events": [e.model_dump(mode="json") for e in events_for_lake(lake.id)],
             },
         )
 
@@ -184,7 +249,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.get("/runs/{phase}/{run_id}", response_class=HTMLResponse)
     def run_detail(request: Request, phase: str, run_id: str) -> HTMLResponse:
-        if phase not in {"day1", "day2"}:
+        if phase not in {"day1", "day2", "analytics"}:
             raise HTTPException(status_code=404, detail=f"unknown phase: {phase}")
         run_dir = output_root / phase / run_id
         if not run_dir.is_dir():
@@ -229,10 +294,16 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.get("/api/lakes")
     def api_lakes() -> JSONResponse:
+        latest_scores = _latest_score_by_lake(output_root)
+        lakes = []
+        for lake in collection.lakes:
+            item = _lake_public_dict(lake)
+            item["computed_pollution_score"] = latest_scores.get(lake.id)
+            lakes.append(item)
         return JSONResponse(
             {
                 "metadata": collection.metadata.model_dump(mode="json"),
-                "lakes": [_lake_public_dict(lake) for lake in collection.lakes],
+                "lakes": lakes,
             }
         )
 
@@ -254,6 +325,27 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 ],
             }
         )
+
+    @app.get("/api/timeseries/{lake_id}")
+    def api_timeseries(lake_id: str) -> JSONResponse:
+        latest = _latest_analytics_dir(output_root)
+        if latest is None:
+            raise HTTPException(status_code=404, detail="No analytics runs found")
+        fp = latest / "lakes" / lake_id / "monthly_timeseries.json"
+        if not fp.exists():
+            raise HTTPException(status_code=404, detail=f"No timeseries found for lake={lake_id}")
+        return JSONResponse(
+            {
+                "lake_id": lake_id,
+                "analytics_run_id": latest.name,
+                "data": json.loads(fp.read_text(encoding="utf-8")),
+            }
+        )
+
+    @app.get("/api/restoration-events/{lake_id}")
+    def api_restoration_events(lake_id: str) -> JSONResponse:
+        events = [e.model_dump(mode="json") for e in events_for_lake(lake_id)]
+        return JSONResponse({"lake_id": lake_id, "events": events})
 
     @app.get("/healthz")
     def healthz() -> dict[str, Any]:

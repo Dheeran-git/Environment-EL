@@ -24,8 +24,13 @@
           <dt>Area</dt><dd>{% if lake.official_area_ha %}{{ "%.1f"|format(lake.official_area_ha) }} ha{% else %}—{% endif %}</dd>
           <dt>Pollution</dt>
           <dd>
+            {% set computed = latest_scores.get(lake.id) %}
             <span class="pill pill-{{ lake.known_pollution_level.value }}">
-              {{ lake.known_pollution_level.value }}
+              {% if computed is not none %}
+                {{ "%.2f"|format(computed) }}/100
+              {% else %}
+                {{ lake.known_pollution_level.value }}
+              {% endif %}
             </span>
           </dd>
           <dt>Centroid</dt><dd>{{ "%.4f"|format(lake.centroid[0]) }}, {{ "%.4f"|format(lake.centroid[1]) }}</dd>
@@ -84,6 +89,13 @@
         unknown: "#8a8f98", low: "#3ca653", moderate: "#e0b400",
         high: "#e06c00", severe: "#c0293a"
       };
+      const scoreToLevel = function (score, fallback) {
+        if (score === null || score === undefined) return fallback || "unknown";
+        if (score < 25) return "low";
+        if (score < 50) return "moderate";
+        if (score < 75) return "high";
+        return "severe";
+      };
       const geojson = {
         type: "FeatureCollection",
         features: payload.lakes.map(function (l) {
@@ -92,8 +104,12 @@
       };
       const layer = L.geoJSON(geojson, {
         style: function (f) {
+          const level = scoreToLevel(
+            f.properties.computed_pollution_score,
+            f.properties.known_pollution_level
+          );
           return {
-            color: palette[f.properties.known_pollution_level] || "#3388ff",
+            color: palette[level] || "#3388ff",
             weight: 2, fillOpacity: 0.5
           };
         },

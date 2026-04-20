@@ -61,6 +61,7 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 "bangalore_lakes.data.lakes" = ["*.geojson", "*.md"]
+"bangalore_lakes.data.restoration" = ["*.json"]
 "bangalore_lakes.web" = ["templates/*.html", "static/*.css", "static/*.js"]
 
 [tool.pytest.ini_options]

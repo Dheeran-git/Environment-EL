@@ -40,11 +40,16 @@ class Settings(BaseSettings):
     default_cloud_pct: float = Field(default=20.0, ge=0.0, le=100.0)
     default_scale_m: int = Field(default=10, ge=1, le=1000)
     default_crs: str = Field(default="EPSG:32643")
+    analytics_start_year: int = Field(default=2020, ge=2015, le=2100)
 
     output_dir: Path = Field(default=Path("outputs"))
     lakes_geojson: Path | None = Field(
         default=None,
         description="Override the bundled lake GeoJSON path.",
+    )
+    restoration_events_json: Path | None = Field(
+        default=None,
+        description="Override bundled restoration-events JSON path.",
     )
 
     log_level: str = Field(default="INFO")

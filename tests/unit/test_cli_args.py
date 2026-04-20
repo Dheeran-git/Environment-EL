@@ -24,7 +24,14 @@ def test_help_lists_all_commands() -> None:
     result = runner.invoke(app, ["--help"])
     assert result.exit_code == 0, result.output
     output = _plain(result.output)
-    for cmd in ("check-auth", "list-lakes", "hello-bangalore", "fetch-lakes"):
+    for cmd in (
+        "check-auth",
+        "list-lakes",
+        "hello-bangalore",
+        "fetch-lakes",
+        "compute-timeseries",
+        "compute-insights",
+    ):
         assert cmd in output
 
 
@@ -63,3 +70,11 @@ def test_fetch_lakes_help_shows_flags() -> None:
     output = _plain(result.output)
     assert "--lakes" in output
     assert "--skip-geotiff" in output
+
+
+def test_compute_timeseries_help_shows_flags() -> None:
+    result = runner.invoke(app, ["compute-timeseries", "--help"])
+    assert result.exit_code == 0
+    output = _plain(result.output)
+    assert "--start-year" in output
+    assert "--scale" in output

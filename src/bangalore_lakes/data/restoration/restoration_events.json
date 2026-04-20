@@ -1,0 +1,41 @@
+{
+  "metadata": {
+    "schema_version": 1,
+    "source": "public announcements and media reports",
+    "generated_at": "2026-04-20"
+  },
+  "events": [
+    {
+      "lake_id": "bellandur",
+      "event_date": "2020-11-15",
+      "title": "Interception and diversion sewage works phase update",
+      "source_url": "https://bwssb.karnataka.gov.in/",
+      "note": "Major cleanup and sewage diversion activity cited for Bellandur catchment.",
+      "confidence": 0.6
+    },
+    {
+      "lake_id": "varthur",
+      "event_date": "2021-06-10",
+      "title": "Foam mitigation and restoration package announcement",
+      "source_url": "https://bbmp.gov.in/",
+      "note": "Varthur restoration and desilting-related interventions announced.",
+      "confidence": 0.6
+    },
+    {
+      "lake_id": "hebbal",
+      "event_date": "2022-02-01",
+      "title": "Lake rejuvenation and maintenance contract cycle",
+      "source_url": "https://bbmp.gov.in/",
+      "note": "Periodic rejuvenation actions referenced in civic updates.",
+      "confidence": 0.5
+    },
+    {
+      "lake_id": "agara",
+      "event_date": "2021-12-20",
+      "title": "Restoration completion announcement",
+      "source_url": "https://bbmp.gov.in/",
+      "note": "Agara restoration works reported as completed in this period.",
+      "confidence": 0.55
+    }
+  ]
+}

@@ -123,6 +123,7 @@ footer.bottom {
 }
 .phase-day1 { background: #3d7fc7; }
 .phase-day2 { background: #4a9e5c; }
+.phase-analytics { background: #6a48b8; }
 
 .pill {
   display: inline-block;

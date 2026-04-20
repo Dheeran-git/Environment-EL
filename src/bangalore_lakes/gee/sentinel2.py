@@ -21,6 +21,7 @@ log = get_logger(__name__)
 COLLECTION_ID = "COPERNICUS/S2_SR_HARMONIZED"
 RGB_BANDS = ("B4", "B3", "B2")
 RGB_VIS = {"min": 0, "max": 3000, "gamma": 1.4, "bands": list(RGB_BANDS)}
+ANALYTICS_BANDS = ("B3", "B4", "B8", "B11")
 
 
 @dataclass(frozen=True)
@@ -131,3 +132,54 @@ def recent_composite(
         )
     composite = collection.median().select(list(RGB_BANDS))
     return composite, descriptor
+
+
+def monthly_index_stats(
+    aoi: ee.Geometry,
+    *,
+    start_date: date,
+    end_date: date,
+    cloud_pct: float,
+    scale_m: int,
+) -> dict[str, float | int]:
+    """Compute NDWI/NDVI/NDTI stats for an AOI over one month window."""
+    import ee
+
+    collection = (
+        ee.ImageCollection(COLLECTION_ID)
+        .filterDate(start_date.isoformat(), end_date.isoformat())
+        .filterBounds(aoi)
+        .filter(ee.Filter.lte("CLOUDY_PIXEL_PERCENTAGE", cloud_pct))
+    )
+    scene_count = int(collection.size().getInfo())
+    if scene_count == 0:
+        return {
+            "ndwi": 0.0,
+            "ndvi": 0.0,
+            "ndti": 0.0,
+            "pixel_count": 0,
+            "scene_count": 0,
+        }
+
+    base = collection.median().select(list(ANALYTICS_BANDS))
+    ndwi = base.normalizedDifference(["B3", "B8"]).rename("ndwi")
+    ndvi = base.normalizedDifference(["B8", "B4"]).rename("ndvi")
+    ndti = base.normalizedDifference(["B11", "B4"]).rename("ndti")
+    water_mask = ndwi.gt(0.0)
+    stack = ndwi.addBands(ndvi).addBands(ndti).updateMask(water_mask)
+    reducer = ee.Reducer.mean().combine(reducer2=ee.Reducer.count(), sharedInputs=True)
+    reduced = stack.reduceRegion(
+        reducer=reducer,
+        geometry=aoi,
+        scale=scale_m,
+        maxPixels=1_000_000_000,
+        bestEffort=True,
+    ).getInfo()
+    reduced = reduced or {}
+    return {
+        "ndwi": float(reduced.get("ndwi_mean", 0.0)),
+        "ndvi": float(reduced.get("ndvi_mean", 0.0)),
+        "ndti": float(reduced.get("ndti_mean", 0.0)),
+        "pixel_count": int(reduced.get("ndwi_count", 0)),
+        "scene_count": scene_count,
+    }

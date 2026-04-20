@@ -29,6 +29,30 @@
   </div>
 
   <section>
+    <h2>Pollution Trend (2020 to now)</h2>
+    <div class="card">
+      <canvas id="trend-chart" height="120"></canvas>
+      <p id="trend-status" class="muted">Loading monthly score series...</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Restoration Events</h2>
+    {% if restoration_events %}
+      <ul class="runs-list">
+        {% for event in restoration_events %}
+          <li>
+            <strong>{{ event.event_date }}</strong> &middot; {{ event.title }}
+            {% if event.source_url %}&middot; <a href="{{ event.source_url }}">source</a>{% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">No structured restoration events available for this lake yet.</p>
+    {% endif %}
+  </section>
+
+  <section>
     <h2>Cached Day 2 artifacts</h2>
     {% if artifacts %}
       <div class="card-grid">
@@ -54,6 +78,7 @@
 {% endblock %}
 
 {% block scripts %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <script>
     (async function () {
       if (typeof L === "undefined") return;
@@ -75,6 +100,88 @@
       }).addTo(map);
       try { map.fitBounds(layer.getBounds(), { padding: [20, 20] }); } catch (e) {}
       setTimeout(function () { map.invalidateSize(); }, 50);
+    })();
+
+    (async function () {
+      const statusEl = document.getElementById("trend-status");
+      const ctx = document.getElementById("trend-chart");
+      if (!ctx || typeof Chart === "undefined") {
+        if (statusEl) statusEl.textContent = "Chart library unavailable.";
+        return;
+      }
+      let payload;
+      try {
+        const r = await fetch("/api/timeseries/{{ lake.id }}");
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        payload = await r.json();
+      } catch (err) {
+        if (statusEl) statusEl.textContent = "No analytics time series yet. Run compute-timeseries.";
+        return;
+      }
+      const rows = payload.data || [];
+      if (!rows.length) {
+        if (statusEl) statusEl.textContent = "No points found in analytics output.";
+        return;
+      }
+      const labels = rows.map(function (r) { return r.month_start.slice(0, 7); });
+      const scores = rows.map(function (r) { return r.pollution_score; });
+      const anomalies = rows.map(function (r) { return !!r.anomaly_flag; });
+      const pointRadius = anomalies.map(function (f) { return f ? 5 : 2; });
+      const pointBg = anomalies.map(function (f) { return f ? "#c0293a" : "#0b6bd5"; });
+
+      let eventMarkers = [];
+      try {
+        const evr = await fetch("/api/restoration-events/{{ lake.id }}");
+        if (evr.ok) {
+          const evData = await evr.json();
+          eventMarkers = (evData.events || []).map(function (e) { return e.event_date.slice(0, 7); });
+        }
+      } catch (e) {}
+
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Pollution score (0-100)",
+              data: scores,
+              borderColor: "#0b6bd5",
+              backgroundColor: "rgba(11,107,213,0.15)",
+              tension: 0.2,
+              pointRadius: pointRadius,
+              pointBackgroundColor: pointBg
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          interaction: { intersect: false, mode: "index" },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                afterLabel: function (ctx) {
+                  const idx = ctx.dataIndex;
+                  const row = rows[idx];
+                  const extra = [];
+                  if (row.anomaly_flag) extra.push("Anomaly >20% MoM");
+                  if (eventMarkers.indexOf(labels[idx]) >= 0) extra.push("Restoration marker month");
+                  if (row.restoration_verdict) extra.push("Verdict: " + row.restoration_verdict);
+                  return extra;
+                }
+              }
+            }
+          },
+          scales: {
+            y: { min: 0, max: 100, title: { display: true, text: "Score" } },
+            x: { ticks: { maxTicksLimit: 12 } }
+          }
+        }
+      });
+      if (statusEl) {
+        const latest = rows[rows.length - 1];
+        statusEl.textContent = "Latest score: " + latest.pollution_score + (latest.restoration_verdict ? " | Verdict: " + latest.restoration_verdict : "");
+      }
     })();
   </script>
 {% endblock %}
