@@ -7,6 +7,9 @@ import App from "./App";
 import Dashboard from "./pages/Dashboard";
 import LakeDetail from "./pages/LakeDetail";
 import Methodology from "./pages/Methodology";
+import Policies from "./pages/Policies";
+import Compare from "./pages/Compare";
+import Cascade from "./pages/Cascade";
 import "./index.css";
 
 const queryClient = new QueryClient({
@@ -27,6 +30,9 @@ const router = createBrowserRouter([
       { index: true, element: <Dashboard /> },
       { path: "lakes/:lakeId", element: <LakeDetail /> },
       { path: "methodology", element: <Methodology /> },
+      { path: "policies", element: <Policies /> },
+      { path: "compare", element: <Compare /> },
+      { path: "cascade", element: <Cascade /> },
     ],
   },
 ]);

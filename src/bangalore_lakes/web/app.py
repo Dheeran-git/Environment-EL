@@ -153,7 +153,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins or ["*"],
-        allow_methods=["GET"],
+        allow_methods=["*"],
         allow_headers=["*"],
     )
 
@@ -355,6 +355,113 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     def api_restoration_events(lake_id: str) -> JSONResponse:
         events = [e.model_dump(mode="json") for e in events_for_lake(lake_id)]
         return JSONResponse({"lake_id": lake_id, "events": events})
+
+    @app.get("/api/reports")
+    def api_get_reports() -> JSONResponse:
+        reports_file = output_root / "citizen_reports.json"
+        if not reports_file.exists():
+            return JSONResponse({"reports": []})
+        try:
+            reports = json.loads(reports_file.read_text(encoding="utf-8"))
+        except Exception:
+            reports = []
+        return JSONResponse({"reports": reports})
+
+    @app.post("/api/reports")
+    async def api_create_report(request: Request) -> JSONResponse:
+        try:
+            body = await request.json()
+        except Exception as e:
+            raise HTTPException(status_code=400, detail="Invalid JSON body") from e
+        
+        lake_id = body.get("lake_id")
+        incident_type = body.get("incident_type")
+        description = body.get("description")
+        reporter_name = body.get("reporter_name", "Anonymous Citizen")
+        lat = body.get("lat")
+        lon = body.get("lon")
+        
+        image_url = body.get("image_url")
+        
+        if not lake_id or not incident_type or not description:
+            raise HTTPException(status_code=400, detail="Missing required fields: lake_id, incident_type, description")
+            
+        reports_file = output_root / "citizen_reports.json"
+        reports = []
+        if reports_file.exists():
+            try:
+                reports = json.loads(reports_file.read_text(encoding="utf-8"))
+            except Exception:
+                reports = []
+                
+        import uuid
+        from datetime import datetime
+        new_report = {
+            "id": str(uuid.uuid4()),
+            "lake_id": lake_id,
+            "incident_type": incident_type,
+            "description": description,
+            "reporter_name": reporter_name,
+            "created_at": datetime.now().isoformat(),
+            "lat": float(lat) if lat is not None else None,
+            "lon": float(lon) if lon is not None else None,
+            "status": "pending",
+            "image_url": str(image_url).strip() if image_url else None
+        }
+        reports.append(new_report)
+        reports_file.write_text(json.dumps(reports, indent=2), encoding="utf-8")
+        return JSONResponse({"status": "success", "report": new_report})
+
+    @app.put("/api/reports/{report_id}")
+    async def api_update_report_status(report_id: str, request: Request) -> JSONResponse:
+        try:
+            body = await request.json()
+        except Exception as e:
+            raise HTTPException(status_code=400, detail="Invalid JSON body") from e
+        
+        status = body.get("status")
+        if status not in {"pending", "under_review", "action_taken"}:
+            raise HTTPException(status_code=400, detail="Invalid status value")
+            
+        reports_file = output_root / "citizen_reports.json"
+        if not reports_file.exists():
+            raise HTTPException(status_code=404, detail="No reports found")
+            
+        try:
+            reports = json.loads(reports_file.read_text(encoding="utf-8"))
+        except Exception:
+            reports = []
+            
+        found = False
+        for rep in reports:
+            if rep.get("id") == report_id:
+                rep["status"] = status
+                found = True
+                break
+                
+        if not found:
+            raise HTTPException(status_code=404, detail="Report not found")
+            
+        reports_file.write_text(json.dumps(reports, indent=2), encoding="utf-8")
+        return JSONResponse({"status": "success"})
+
+    @app.delete("/api/reports/{report_id}")
+    def api_delete_report(report_id: str) -> JSONResponse:
+        reports_file = output_root / "citizen_reports.json"
+        if not reports_file.exists():
+            raise HTTPException(status_code=404, detail="No reports found")
+            
+        try:
+            reports = json.loads(reports_file.read_text(encoding="utf-8"))
+        except Exception:
+            reports = []
+            
+        filtered_reports = [r for r in reports if r.get("id") != report_id]
+        if len(filtered_reports) == len(reports):
+            raise HTTPException(status_code=404, detail="Report not found")
+            
+        reports_file.write_text(json.dumps(filtered_reports, indent=2), encoding="utf-8")
+        return JSONResponse({"status": "success"})
 
     @app.get("/healthz")
     def healthz() -> dict[str, Any]:

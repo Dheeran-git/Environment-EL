@@ -1,6 +1,7 @@
+import type { Lake } from "../lib/types";
 import { NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Waves, LayoutDashboard, BookOpen, Activity } from "lucide-react";
+import { Waves, LayoutDashboard, BookOpen, Activity, ShieldCheck, GitCompare, GitBranch } from "lucide-react";
 import { api } from "../lib/api";
 
 export default function Sidebar() {
@@ -27,6 +28,18 @@ export default function Sidebar() {
           <LayoutDashboard className="w-4 h-4" />
           Dashboard
         </NavLink>
+        <NavLink to="/compare" className={navItemClass}>
+          <GitCompare className="w-4 h-4" />
+          Compare Lakes
+        </NavLink>
+        <NavLink to="/cascade" className={navItemClass}>
+          <GitBranch className="w-4 h-4" />
+          Cascade Modeler
+        </NavLink>
+        <NavLink to="/policies" className={navItemClass}>
+          <ShieldCheck className="w-4 h-4" />
+          Restoration & Policies
+        </NavLink>
         <NavLink to="/methodology" className={navItemClass}>
           <BookOpen className="w-4 h-4" />
           Methodology
@@ -37,7 +50,7 @@ export default function Sidebar() {
         Lakes
       </div>
       <nav className="px-2 flex flex-col gap-0.5 overflow-y-auto scrollbar-thin">
-        {lakes.data?.lakes.map((lake) => (
+        {lakes.data?.lakes.map((lake: Lake) => (
           <NavLink
             key={lake.id}
             to={`/lakes/${lake.id}`}

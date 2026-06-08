@@ -94,10 +94,12 @@ def test_service_account_email_override(monkeypatch: pytest.MonkeyPatch, tmp_pat
     assert info.account == "override@example.com"
 
 
-def test_missing_project_raises(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_missing_project_raises(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     _install_fake_ee(monkeypatch)
     from bangalore_lakes.gee.auth import GEEAuthError, initialize_ee
 
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.delenv("BLWQ_GEE_PROJECT_ID", raising=False)
     with pytest.raises(GEEAuthError, match="project id"):
         initialize_ee(Settings())
 

@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Printer, Compass, CheckCircle2 } from "lucide-react";
 import { api } from "../lib/api";
 import MetricStat from "../components/MetricStat";
 import ScorePill from "../components/ScorePill";
@@ -9,6 +10,9 @@ import VerdictCard from "../components/VerdictCard";
 import TrendChart from "../components/TrendChart";
 import EventList from "../components/EventList";
 import { formatPct, formatScore } from "../lib/scoring";
+import SatelliteImagery from "../components/SatelliteImagery";
+import type { Lake } from "../lib/types";
+import { POLICIES } from "./Policies";
 
 export default function LakeDetail() {
   const { lakeId = "" } = useParams<{ lakeId: string }>();
@@ -25,14 +29,27 @@ export default function LakeDetail() {
     retry: false,
   });
 
-  const lake = lakesQuery.data?.lakes.find((l) => l.id === lakeId);
+  const [selectedActions, setSelectedActions] = useState<string[]>([]);
+
+  const toggleAction = (id: string) => {
+    setSelectedActions(prev => 
+      prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id]
+    );
+  };
+
+  const lake = lakesQuery.data?.lakes.find((l: Lake) => l.id === lakeId);
   const rows = seriesQuery.data?.data ?? [];
   const latest = rows[rows.length - 1];
   const events = eventsQuery.data?.events ?? [];
 
+  const totalImpact = selectedActions.reduce((acc, actionId) => {
+    const action = POLICIES.find(p => p.id === actionId);
+    return acc + (action?.impact ?? 0);
+  }, 0);
+
   return (
     <div className="p-6 max-w-[1400px] mx-auto">
-      <nav className="text-[12px] text-fg-muted mb-3">
+      <nav className="text-[12px] text-fg-muted mb-3 no-print">
         <Link to="/" className="inline-flex items-center gap-1 hover:text-fg">
           <ArrowLeft className="w-3.5 h-3.5" /> Dashboard
         </Link>
@@ -63,6 +80,13 @@ export default function LakeDetail() {
               </div>
             </div>
             <div className="flex items-center gap-2">
+              <button
+                onClick={() => window.print()}
+                className="px-3 py-1.5 rounded-lg border border-border bg-surface hover:bg-surface-2 text-fg hover:text-accent text-[12.5px] font-medium flex items-center gap-1.5 transition-all no-print"
+              >
+                <Printer className="w-3.5 h-3.5" />
+                Export Report Card
+              </button>
               {latest?.anomaly_flag && <AnomalyBadge mom={latest.mom_change_pct} />}
               <ScorePill score={latest?.pollution_score ?? lake.computed_pollution_score} />
             </div>
@@ -101,21 +125,84 @@ export default function LakeDetail() {
             />
           </section>
 
-          <section className="mb-5">
+          <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-5">
+            <div className="lg:col-span-2">
+              <h2 className="text-[11px] uppercase tracking-wider text-fg-muted mb-2">
+                Pollution trend & Projections (2020 → now)
+              </h2>
+              {seriesQuery.isLoading ? (
+                <div className="rounded-lg border border-border bg-surface p-6 text-fg-muted text-center">
+                  Loading time series…
+                </div>
+              ) : seriesQuery.isError || rows.length === 0 ? (
+                <div className="rounded-lg border border-border bg-surface p-6 text-fg-muted text-center">
+                  No analytics time series yet. Run <code className="font-mono text-fg">bangalore-lakes compute-timeseries</code>.
+                </div>
+              ) : (
+                <TrendChart rows={rows} events={events} simulatedImpactPoints={totalImpact} />
+              )}
+            </div>
+
+            {/* Scenario Builder Panel */}
+            <div className="bg-surface border border-border rounded-xl p-5 flex flex-col justify-between h-fit no-print">
+              <div className="space-y-4">
+                <h3 className="text-[11px] uppercase tracking-wider text-fg-muted font-semibold flex items-center gap-1.5">
+                  <Compass className="w-4 h-4 text-accent" />
+                  Restoration Scenario Builder
+                </h3>
+                <p className="text-fg-muted text-[12.5px] leading-normal">
+                  Toggle active restoration policies below to simulate their cumulative impact on the lake's 36-month future recovery path.
+                </p>
+
+                <div className="space-y-2.5 max-h-[260px] overflow-y-auto scrollbar-thin pr-1">
+                  {POLICIES.map((p) => {
+                    const active = selectedActions.includes(p.id);
+                    return (
+                      <button
+                        key={p.id}
+                        onClick={() => toggleAction(p.id)}
+                        className={`w-full p-3 rounded-xl border text-left transition-all flex items-center justify-between gap-3 ${
+                          active 
+                            ? "bg-surface-2 border-accent/60 ring-1 ring-accent/30 shadow-sm" 
+                            : "bg-surface border-border hover:border-fg-muted/40 hover:bg-surface-2/40"
+                        }`}
+                      >
+                        <div className="flex-1 min-w-0">
+                          <div className="flex justify-between items-center gap-2">
+                            <span className={`text-[8.5px] uppercase tracking-wider px-1.5 py-0.25 rounded font-semibold ${
+                              p.category === "engineering" ? "bg-blue-500/10 text-blue-400 border border-blue-500/20" :
+                              p.category === "ecological" ? "bg-green-500/10 text-green-400 border border-green-500/20" :
+                              "bg-purple-500/10 text-purple-400 border border-purple-500/20"
+                            }`}>
+                              {p.category}
+                            </span>
+                            <span className="text-[10px] font-mono font-semibold text-accent shrink-0">+{p.impact} pts</span>
+                          </div>
+                          <h4 className="font-semibold text-[13px] mt-1.5 text-fg truncate">{p.name}</h4>
+                        </div>
+                        <div className={`w-4 h-4 rounded-full flex items-center justify-center border shrink-0 ${
+                          active ? "bg-accent border-accent text-bg" : "border-border"
+                        }`}>
+                          {active && <CheckCircle2 className="w-2.5 h-2.5 text-bg-default stroke-[3px]" />}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="border-t border-border/60 mt-4 pt-3 flex items-center justify-between">
+                <span className="text-[12px] font-medium text-fg">Cumulative Impact:</span>
+                <span className="text-[13px] font-bold font-mono text-accent">+{totalImpact} Impact Points</span>
+              </div>
+            </div>
+          </section>
+
+          <section className="mb-5 no-print">
             <h2 className="text-[11px] uppercase tracking-wider text-fg-muted mb-2">
-              Pollution trend (2020 → now)
+              Satellite Remote Sensing Band Analysis
             </h2>
-            {seriesQuery.isLoading ? (
-              <div className="rounded-lg border border-border bg-surface p-6 text-fg-muted text-center">
-                Loading time series…
-              </div>
-            ) : seriesQuery.isError || rows.length === 0 ? (
-              <div className="rounded-lg border border-border bg-surface p-6 text-fg-muted text-center">
-                No analytics time series yet. Run <code className="font-mono text-fg">bangalore-lakes compute-timeseries</code>.
-              </div>
-            ) : (
-              <TrendChart rows={rows} events={events} />
-            )}
+            <SatelliteImagery />
           </section>
 
           <section>

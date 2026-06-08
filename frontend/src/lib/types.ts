@@ -79,3 +79,20 @@ export interface HealthPayload {
   output_root: string;
   output_root_exists: boolean;
 }
+
+export interface CitizenReport {
+  id: string;
+  lake_id: string;
+  incident_type: string;
+  description: string;
+  reporter_name: string;
+  created_at: string;
+  lat: number | null;
+  lon: number | null;
+  status?: "pending" | "under_review" | "action_taken";
+  image_url?: string | null;
+}
+
+export interface GetReportsPayload {
+  reports: CitizenReport[];
+}

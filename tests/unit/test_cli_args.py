@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+from pathlib import Path
 
 import pytest
 from typer.testing import CliRunner
@@ -41,8 +42,8 @@ def test_version_flag() -> None:
     assert __version__ in _plain(result.output)
 
 
-def test_list_lakes(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.chdir("/tmp")
+def test_list_lakes(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    monkeypatch.chdir(tmp_path)
     result = runner.invoke(app, ["list-lakes"])
     assert result.exit_code == 0, result.output
     output = _plain(result.output)

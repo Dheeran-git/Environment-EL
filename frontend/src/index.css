@@ -62,3 +62,45 @@ body {
 .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
 .scrollbar-thin::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+
+/* Print styles for clean report card export */
+@media print {
+  aside,
+  nav,
+  .no-print,
+  button {
+    display: none !important;
+  }
+  
+  body, main, #root {
+    background: #ffffff !important;
+    color: #111111 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 20px !important;
+  }
+
+  /* Reset border colors for high contrast printing */
+  .border, .border-r, .border-b, .border-t {
+    border-color: #dddddd !important;
+  }
+
+  .bg-surface, .bg-surface-2, .bg-surface-2\/40 {
+    background-color: #f9f9f9 !important;
+  }
+
+  .text-fg, .text-fg-muted {
+    color: #111111 !important;
+  }
+
+  /* Keep chart and details formatted for page width */
+  main > div {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .recharts-responsive-container {
+    width: 100% !important;
+    height: 320px !important;
+  }
+}
