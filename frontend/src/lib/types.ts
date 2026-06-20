@@ -96,3 +96,11 @@ export interface CitizenReport {
 export interface GetReportsPayload {
   reports: CitizenReport[];
 }
+
+export interface LakeArtifactsPayload {
+  lake_id: string;
+  thumb_url: string | null;
+  thumb_ndwi_url: string | null;
+  thumb_ndvi_url: string | null;
+  day2_run_id: string | null;
+}

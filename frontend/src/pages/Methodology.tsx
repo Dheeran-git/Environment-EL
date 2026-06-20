@@ -60,7 +60,7 @@ export default function Methodology() {
       <Section title="4. Anomaly detection">
         <p>
           For each month we compute the month-over-month change in pollution
-          score. If <Mono>|MoM| &gt; 20%</Mono>, that observation is flagged as an
+          score. If the score increases by <Mono>MoM &gt; +20%</Mono>, that observation is flagged as an
           anomaly. Flags surface on the dashboard and as red dots on the trend
           chart so sudden spikes (e.g. untreated inflow, algal bloom) are
           visually inescapable.
@@ -77,7 +77,7 @@ export default function Methodology() {
           <li>post−pre ≤ −5 → <span className="text-pill-low">improved</span></li>
           <li>post−pre ≥ +5 → <span className="text-pill-severe">worsened</span></li>
           <li>otherwise → <span className="text-pill-mod">unchanged</span></li>
-          <li>fewer than 3 observations on either side → <span className="text-fg-muted">insufficient data</span></li>
+          <li>no observations on either side → <span className="text-fg-muted">insufficient data</span></li>
         </ul>
         <p className="mt-2">
           Confidence is <Mono>min(1, |post − pre| / 25)</Mono> — a 25-point swing
@@ -88,9 +88,8 @@ export default function Methodology() {
       <Section title="6. Restoration data provenance">
         <p>
           Event dates and titles come from a hand-curated registry of BBMP
-          and Karnataka High Court announcements covering Bellandur, Varthur,
-          Hebbal, and Agara. Ulsoor and Sankey don't yet have comparable
-          documented interventions, so their verdict reads "insufficient data".
+          and Karnataka High Court announcements covering all 5 lakes in our database
+          (Bellandur, Varthur, Hebbal, Ulsoor, and Sankey Tank).
           See <Mono>src/bangalore_lakes/data/restoration/restoration_events.json</Mono>.
         </p>
       </Section>

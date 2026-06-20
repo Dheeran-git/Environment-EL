@@ -1,8 +1,8 @@
 # Bangalore Lakes Water Quality Estimator
 
 A hyperlocal, Bangalore-specific satellite analysis pipeline that pulls
-Sentinel-2 imagery for six named lakes — **Bellandur, Varthur, Hebbal, Ulsoor,
-Sankey, Agara** — and produces clipped imagery for downstream water-quality
+Sentinel-2 imagery for five named lakes — **Bellandur, Varthur, Hebbal, Ulsoor,
+Sankey** — and produces clipped imagery for downstream water-quality
 analysis.
 
 This repository covers **Day 1 + Day 2 + analytics extensions** of the Week 1 roadmap:

@@ -16,6 +16,7 @@ from bangalore_lakes.commands._common import (
 from bangalore_lakes.config import Settings
 from bangalore_lakes.gee import export as gee_export
 from bangalore_lakes.gee import sentinel2
+from bangalore_lakes.gee.sentinel2 import NDWI_VIS, NDVI_VIS, RGB_VIS
 from bangalore_lakes.gee.session import ensure_initialized
 from bangalore_lakes.lakes import Lake, load_collection
 from bangalore_lakes.logging_setup import get_logger
@@ -31,7 +32,9 @@ log = get_logger(__name__)
 class LakeArtifacts:
     lake_id: str
     dir: Path
-    thumb_png: Path
+    thumb_png: Path          # true-colour RGB
+    thumb_ndwi_png: Path     # NDWI false-colour (water = cyan)
+    thumb_ndvi_png: Path     # NDVI algal-bloom (algae = green)
     geotiff: Path | None
     metadata: Path
 
@@ -76,6 +79,23 @@ def _aoi_from_lakes(lakes: Iterable[Lake]) -> ee.Geometry:
     return ee.Geometry.Rectangle([west, south, east, north], proj="EPSG:4326", geodesic=False)
 
 
+def _padded_thumb_region(lake: Lake, pad_deg: float = 0.012) -> ee.Geometry:
+    """Bounding box padded ~1.3 km around the lake centroid for thumbnail exports.
+
+    Using a padded region instead of the tight polygon gives visual context:
+    surrounding roads, buildings, and vegetation provide the brightness
+    contrast that makes the water body clearly visible in the image.
+    """
+    import ee
+
+    lon, lat = lake.centroid
+    return ee.Geometry.Rectangle(
+        [lon - pad_deg, lat - pad_deg, lon + pad_deg, lat + pad_deg],
+        proj="EPSG:4326",
+        geodesic=False,
+    )
+
+
 def run_fetch_lakes(
     *,
     settings: Settings,
@@ -115,14 +135,41 @@ def run_fetch_lakes(
         lake_dir.mkdir(parents=True, exist_ok=True)
 
         geom = _lake_geometry(lake)
+        # Padded region for thumbnails: lake + ~1.3 km surroundings for visual context
+        thumb_region = _padded_thumb_region(lake)
+        # Clip only to the tight polygon for analytics/GeoTIFF precision
         clipped = composite.clip(geom)
+        # For thumbnails, use the full composite over the padded region (no clip)
+        # so surrounding land provides contrast that makes the water body visible.
+        thumb_composite = composite
 
         thumb_path = lake_dir / "thumb.png"
         thumb_artifact = gee_export.clipped_thumb_png(
-            clipped,
-            region=geom,
+            thumb_composite,
+            region=thumb_region,
             out_path=thumb_path,
             dimensions=1024,
+            vis_params=RGB_VIS,
+        )
+
+        # NDWI false-colour thumbnail: water → cyan, land → brown/red
+        thumb_ndwi_path = lake_dir / "thumb_ndwi.png"
+        thumb_ndwi_artifact = gee_export.clipped_thumb_png(
+            thumb_composite,
+            region=thumb_region,
+            out_path=thumb_ndwi_path,
+            dimensions=1024,
+            vis_params=NDWI_VIS,
+        )
+
+        # NDVI algal-bloom thumbnail: algae → green, open water → dark
+        thumb_ndvi_path = lake_dir / "thumb_ndvi.png"
+        thumb_ndvi_artifact = gee_export.clipped_thumb_png(
+            thumb_composite,
+            region=thumb_region,
+            out_path=thumb_ndvi_path,
+            dimensions=1024,
+            vis_params=NDVI_VIS,
         )
 
         geotiff_path: Path | None = None
@@ -169,6 +216,10 @@ def run_fetch_lakes(
                     "crs": settings.default_crs,
                     "thumb_png_sha256": thumb_artifact.sha256,
                     "thumb_png_bytes": thumb_artifact.size_bytes,
+                    "thumb_ndwi_png_sha256": thumb_ndwi_artifact.sha256,
+                    "thumb_ndwi_png_bytes": thumb_ndwi_artifact.size_bytes,
+                    "thumb_ndvi_png_sha256": thumb_ndvi_artifact.sha256,
+                    "thumb_ndvi_png_bytes": thumb_ndvi_artifact.size_bytes,
                     "geotiff_sha256": geotiff_sha,
                     "geotiff_bytes": geotiff_bytes,
                 },
@@ -180,6 +231,8 @@ def run_fetch_lakes(
                 lake_id=lake.id,
                 dir=lake_dir,
                 thumb_png=thumb_path,
+                thumb_ndwi_png=thumb_ndwi_path,
+                thumb_ndvi_png=thumb_ndvi_path,
                 geotiff=geotiff_path,
                 metadata=lake_metadata_path,
             )

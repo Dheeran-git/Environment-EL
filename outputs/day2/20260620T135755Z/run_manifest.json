@@ -1,0 +1,85 @@
+{
+  "run_id": "20260620T135755Z",
+  "phase": "day2",
+  "days": 90,
+  "cloud_pct_threshold": 40.0,
+  "scale_m": 10,
+  "crs": "EPSG:32643",
+  "lakes": [
+    {
+      "id": "bellandur",
+      "dir": "lakes/bellandur",
+      "thumb_png": "lakes/bellandur/thumb.png",
+      "geotiff": "lakes/bellandur/clipped.tif",
+      "metadata": "lakes/bellandur/metadata.json"
+    },
+    {
+      "id": "varthur",
+      "dir": "lakes/varthur",
+      "thumb_png": "lakes/varthur/thumb.png",
+      "geotiff": "lakes/varthur/clipped.tif",
+      "metadata": "lakes/varthur/metadata.json"
+    },
+    {
+      "id": "hebbal",
+      "dir": "lakes/hebbal",
+      "thumb_png": "lakes/hebbal/thumb.png",
+      "geotiff": "lakes/hebbal/clipped.tif",
+      "metadata": "lakes/hebbal/metadata.json"
+    },
+    {
+      "id": "ulsoor",
+      "dir": "lakes/ulsoor",
+      "thumb_png": "lakes/ulsoor/thumb.png",
+      "geotiff": "lakes/ulsoor/clipped.tif",
+      "metadata": "lakes/ulsoor/metadata.json"
+    },
+    {
+      "id": "sankey",
+      "dir": "lakes/sankey",
+      "thumb_png": "lakes/sankey/thumb.png",
+      "geotiff": "lakes/sankey/clipped.tif",
+      "metadata": "lakes/sankey/metadata.json"
+    }
+  ],
+  "overlay_html": "multi_lake_overlay.html",
+  "gee_project_id": "project1-470606",
+  "gee_account": "user-credentials",
+  "composite": {
+    "start_date": "2026-03-22",
+    "end_date": "2026-06-20",
+    "collection_size_postfilter": 24,
+    "image_ids": [
+      "20260323T050649_20260323T051951_T43PGQ",
+      "20260323T050649_20260323T051951_T43PHQ",
+      "20260328T050651_20260328T051818_T43PGQ",
+      "20260328T050651_20260328T051818_T43PHQ",
+      "20260402T050649_20260402T052206_T43PHQ",
+      "20260407T050651_20260407T051515_T43PGQ",
+      "20260407T050651_20260407T051515_T43PHQ",
+      "20260409T051241_20260409T051808_T43PGQ",
+      "20260409T051241_20260409T051808_T43PHQ",
+      "20260412T050649_20260412T052422_T43PGQ",
+      "20260412T050649_20260412T052422_T43PHQ",
+      "20260417T050651_20260417T051527_T43PGQ",
+      "20260422T050649_20260422T052413_T43PGQ",
+      "20260422T050649_20260422T052413_T43PHQ",
+      "20260427T050651_20260427T051531_T43PGQ",
+      "20260427T050651_20260427T051531_T43PHQ",
+      "20260429T051241_20260429T051803_T43PGQ",
+      "20260429T051241_20260429T051803_T43PHQ",
+      "20260502T050649_20260502T052204_T43PGQ",
+      "20260512T050649_20260512T052201_T43PGQ",
+      "20260512T050649_20260512T052201_T43PHQ",
+      "20260519T051241_20260519T051803_T43PHQ",
+      "20260601T050649_20260601T052424_T43PHQ",
+      "20260616T050651_20260616T051534_T43PHQ"
+    ]
+  },
+  "host": {
+    "user": null,
+    "pwd": "C:/Users/rohan/OneDrive/Desktop/cursorOP/envi",
+    "package_version": "0.1.0",
+    "git_sha": "652a2a2"
+  }
+}

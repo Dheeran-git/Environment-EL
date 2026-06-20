@@ -47,7 +47,7 @@ def test_list_lakes(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     result = runner.invoke(app, ["list-lakes"])
     assert result.exit_code == 0, result.output
     output = _plain(result.output)
-    for lake_id in ("bellandur", "varthur", "hebbal", "ulsoor", "sankey", "agara"):
+    for lake_id in ("bellandur", "varthur", "hebbal", "ulsoor", "sankey"):
         assert lake_id in output
 
 

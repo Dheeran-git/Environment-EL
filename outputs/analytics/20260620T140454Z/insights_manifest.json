@@ -1,0 +1,34 @@
+{
+  "lakes": {
+    "bellandur": {
+      "anomaly_count": 1,
+      "restoration_events": 1,
+      "restoration_verdict": "unchanged",
+      "restoration_confidence": 0.06
+    },
+    "hebbal": {
+      "anomaly_count": 2,
+      "restoration_events": 1,
+      "restoration_verdict": "unchanged",
+      "restoration_confidence": 0.13
+    },
+    "sankey": {
+      "anomaly_count": 3,
+      "restoration_events": 1,
+      "restoration_verdict": "worsened",
+      "restoration_confidence": 0.37
+    },
+    "ulsoor": {
+      "anomaly_count": 5,
+      "restoration_events": 1,
+      "restoration_verdict": "unchanged",
+      "restoration_confidence": 0.13
+    },
+    "varthur": {
+      "anomaly_count": 2,
+      "restoration_events": 1,
+      "restoration_verdict": "unchanged",
+      "restoration_confidence": 0.09
+    }
+  }
+}

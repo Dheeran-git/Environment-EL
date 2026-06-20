@@ -1,0 +1,58 @@
+{
+  "lake_id": "bellandur",
+  "name": "Bellandur Lake",
+  "alt_names": [],
+  "ward": "Bellandur",
+  "bbmp_ward_no": 150,
+  "centroid": [
+    77.6622,
+    12.9345
+  ],
+  "official_area_ha": 364.0,
+  "known_pollution_level": "severe",
+  "composite": {
+    "start_date": "2026-03-22",
+    "end_date": "2026-06-20",
+    "cloud_pct_threshold": 40.0,
+    "collection_size_postfilter": 24,
+    "median_acquisition_date": "2026-04-22",
+    "image_ids": [
+      "20260323T050649_20260323T051951_T43PGQ",
+      "20260323T050649_20260323T051951_T43PHQ",
+      "20260328T050651_20260328T051818_T43PGQ",
+      "20260328T050651_20260328T051818_T43PHQ",
+      "20260402T050649_20260402T052206_T43PHQ",
+      "20260407T050651_20260407T051515_T43PGQ",
+      "20260407T050651_20260407T051515_T43PHQ",
+      "20260409T051241_20260409T051808_T43PGQ",
+      "20260409T051241_20260409T051808_T43PHQ",
+      "20260412T050649_20260412T052422_T43PGQ",
+      "20260412T050649_20260412T052422_T43PHQ",
+      "20260417T050651_20260417T051527_T43PGQ",
+      "20260422T050649_20260422T052413_T43PGQ",
+      "20260422T050649_20260422T052413_T43PHQ",
+      "20260427T050651_20260427T051531_T43PGQ",
+      "20260427T050651_20260427T051531_T43PHQ",
+      "20260429T051241_20260429T051803_T43PGQ",
+      "20260429T051241_20260429T051803_T43PHQ",
+      "20260502T050649_20260502T052204_T43PGQ",
+      "20260512T050649_20260512T052201_T43PGQ",
+      "20260512T050649_20260512T052201_T43PHQ",
+      "20260519T051241_20260519T051803_T43PHQ",
+      "20260601T050649_20260601T052424_T43PHQ",
+      "20260616T050651_20260616T051534_T43PHQ"
+    ]
+  },
+  "export": {
+    "scale_m": 10,
+    "crs": "EPSG:32643",
+    "thumb_png_sha256": "e1c57ba56cc246c7b18eeca5fe1b8d3c1a8262ce23636666afc7d8d802c53842",
+    "thumb_png_bytes": 264815,
+    "thumb_ndwi_png_sha256": "e9527903a0cc9a16f534f573db2a555d7654887f94de21fcd9fea991b6b54b96",
+    "thumb_ndwi_png_bytes": 211137,
+    "thumb_ndvi_png_sha256": "d8629340ef67a2483737caa7ead8436c75a6a0a62c2a3f052586525fd5f4639b",
+    "thumb_ndvi_png_bytes": 242015,
+    "geotiff_sha256": "0ebf6abcc9afc3f99e499e6ab22b1c01cd6edafc9f118f21318e510447ddf8ea",
+    "geotiff_bytes": 248321
+  }
+}

@@ -86,7 +86,14 @@ def _latest_score_by_lake(output_root: Path) -> dict[str, float]:
     for lake_dir in [p for p in lakes_root.iterdir() if p.is_dir()]:
         data = _read_lake_timeseries(lake_dir / "monthly_timeseries.json")
         if data:
-            scores[lake_dir.name] = data[-1].pollution_score
+            # Find last entry with pixel_count > 0
+            last_valid = None
+            for entry in reversed(data):
+                if entry.pixel_count > 0:
+                    last_valid = entry
+                    break
+            if last_valid:
+                scores[lake_dir.name] = last_valid.pollution_score
     return scores
 
 
@@ -353,8 +360,44 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.get("/api/restoration-events/{lake_id}")
     def api_restoration_events(lake_id: str) -> JSONResponse:
-        events = [e.model_dump(mode="json") for e in events_for_lake(lake_id)]
+        events = []
+        for e in events_for_lake(lake_id):
+            d = e.model_dump(mode="json")
+            d["description"] = d.get("note")
+            events.append(d)
         return JSONResponse({"lake_id": lake_id, "events": events})
+
+    @app.get("/api/lake-artifacts/{lake_id}")
+    def api_lake_artifacts(lake_id: str) -> JSONResponse:
+        """Get latest artifacts (thumbnails) for a lake from the most recent day2 run."""
+        artifacts: dict[str, Any] = {
+            "lake_id": lake_id,
+            "thumb_url": None,
+            "thumb_ndwi_url": None,
+            "thumb_ndvi_url": None,
+            "day2_run_id": None,
+        }
+        for run in _list_runs(output_root):
+            if run.phase == "day2" and lake_id in run.lake_ids:
+                lake_dir = run.path / "lakes" / lake_id
+                thumb = lake_dir / "thumb.png"
+                thumb_ndwi = lake_dir / "thumb_ndwi.png"
+                thumb_ndvi = lake_dir / "thumb_ndvi.png"
+                if thumb.exists():
+                    artifacts["thumb_url"] = (
+                        f"/artifacts/day2/{run.run_id}/lakes/{lake_id}/thumb.png"
+                    )
+                if thumb_ndwi.exists():
+                    artifacts["thumb_ndwi_url"] = (
+                        f"/artifacts/day2/{run.run_id}/lakes/{lake_id}/thumb_ndwi.png"
+                    )
+                if thumb_ndvi.exists():
+                    artifacts["thumb_ndvi_url"] = (
+                        f"/artifacts/day2/{run.run_id}/lakes/{lake_id}/thumb_ndvi.png"
+                    )
+                artifacts["day2_run_id"] = run.run_id
+                break
+        return JSONResponse(artifacts)
 
     @app.get("/api/reports")
     def api_get_reports() -> JSONResponse:

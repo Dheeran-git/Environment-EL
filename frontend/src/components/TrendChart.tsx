@@ -60,16 +60,78 @@ const BANGALORE_RAINFALL: Record<number, number> = {
   12: 12  // Dec
 };
 
+function findClosestMonth(eventDateStr: string, availableMonths: string[]): string {
+  if (availableMonths.length === 0) return eventDateStr.slice(0, 7);
+  const eventTime = new Date(eventDateStr + "T00:00:00").getTime();
+  let closest = availableMonths[0];
+  let minDiff = Math.abs(new Date(closest + "-01T00:00:00").getTime() - eventTime);
+  for (const m of availableMonths) {
+    const diff = Math.abs(new Date(m + "-01T00:00:00").getTime() - eventTime);
+    if (diff < minDiff) {
+      minDiff = diff;
+      closest = m;
+    }
+  }
+  return closest;
+}
+
+const RenderReferenceLineLabel = (props: any) => {
+  const { viewBox, value } = props;
+  if (!viewBox || !value) return null;
+
+  // Split title into lines of max ~20 characters
+  const words = value.split(" ");
+  const lines: string[] = [];
+  let currentLine = "";
+
+  for (const word of words) {
+    if ((currentLine + " " + word).length > 20) {
+      if (currentLine) lines.push(currentLine.trim());
+      currentLine = word;
+    } else {
+      currentLine += " " + word;
+    }
+  }
+  if (currentLine) {
+    lines.push(currentLine.trim());
+  }
+
+  // Adjust positioning to avoid edge overflow
+  const isRightHalf = viewBox.x > (viewBox.width || 400) * 0.75;
+  const textX = isRightHalf ? viewBox.x - 6 : viewBox.x + 6;
+  const textAnchor = isRightHalf ? "end" : "start";
+
+  return (
+    <text
+      x={textX}
+      y={viewBox.y + 12}
+      fill="#eb5757"
+      fontSize={10}
+      fontFamily="Inter"
+      fontWeight="500"
+      textAnchor={textAnchor}
+    >
+      {lines.map((line, index) => (
+        <tspan x={textX} dy={index === 0 ? 0 : 12} key={index}>
+          {line}
+        </tspan>
+      ))}
+    </text>
+  );
+};
+
 export default function TrendChart({ rows, events, simulatedImpactPoints = 0 }: Props) {
   const [showRainfall, setShowRainfall] = useState(true);
   const [showForecast, setShowForecast] = useState(true);
 
   // Process data points and add rainfall + forecast projections
   const chartData = useMemo(() => {
-    if (rows.length === 0) return [];
+    // Filter out invalid rows (pixel_count <= 0)
+    const validRows = rows.filter((row: any) => row.pixel_count > 0);
+    if (validRows.length === 0) return [];
 
     // Map existing rows and inject rainfall
-    const baseData = rows.map((r) => {
+    const baseData = validRows.map((r) => {
       const dateObj = new Date(r.month_start);
       const monthNum = dateObj.getMonth() + 1; // 1-12
       return {
@@ -87,14 +149,14 @@ export default function TrendChart({ rows, events, simulatedImpactPoints = 0 }: 
     }
 
     // Calculate future forecast (6 months ahead, or 36 months if simulation is active)
-    const lastRow = rows[rows.length - 1];
+    const lastRow = validRows[validRows.length - 1];
     const forecastPoints: any[] = [];
     const forecastMonths = simulatedImpactPoints > 0 ? 36 : 6;
     
     // Estimate trend slope from last 6 data points
     let trendSlope = 0;
-    if (rows.length >= 6) {
-      const slice = rows.slice(-6);
+    if (validRows.length >= 6) {
+      const slice = validRows.slice(-6);
       const startVal = slice[0].pollution_score;
       const endVal = slice[slice.length - 1].pollution_score;
       trendSlope = (endVal - startVal) / 5.0; // average score change per month
@@ -300,24 +362,21 @@ export default function TrendChart({ rows, events, simulatedImpactPoints = 0 }: 
                 />
               )}
 
-              {events.map((ev, i) => (
-                <ReferenceLine
-                  yAxisId="left"
-                  key={`${ev.event_date}-${i}`}
-                  x={formatMonth(ev.event_date)}
-                  stroke="#eb5757"
-                  strokeDasharray="3 3"
-                  strokeOpacity={0.85}
-                >
-                  <Label
-                    value={ev.title.slice(0, 24)}
-                    position="insideTopRight"
-                    fill="#eb5757"
-                    fontSize={10}
-                    fontFamily="Inter"
+              {events.map((ev, i) => {
+                const availableMonths = chartData.map((d) => d.month);
+                const closestMonth = findClosestMonth(ev.event_date, availableMonths);
+                return (
+                  <ReferenceLine
+                    yAxisId="left"
+                    key={`${ev.event_date}-${i}`}
+                    x={closestMonth}
+                    stroke="#eb5757"
+                    strokeDasharray="3 3"
+                    strokeOpacity={0.85}
+                    label={<RenderReferenceLineLabel value={ev.title} />}
                   />
-                </ReferenceLine>
-              ))}
+                );
+              })}
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -327,7 +386,7 @@ export default function TrendChart({ rows, events, simulatedImpactPoints = 0 }: 
           {showForecast && simulatedImpactPoints > 0 && <LegendSwatch color="#27ae60" label="Pollution score (Simulated Recovery)" dashed />}
           {showRainfall && <LegendSwatch color="#2f80ed" label="Rainfall (mm) correlation" bar />}
           <LegendSwatch color="#eb5757" label="Anomaly > 20% MoM" dot />
-          <LegendSwatch color="#eb5757" label="Restoration event" dashed />
+          <LegendSwatch color="#eb5757" label="Restoration event" dotted />
         </div>
       </div>
     </div>
@@ -339,12 +398,14 @@ function LegendSwatch({
   label,
   dot,
   dashed,
+  dotted,
   bar
 }: {
   color: string;
   label: string;
   dot?: boolean;
   dashed?: boolean;
+  dotted?: boolean;
   bar?: boolean;
 }) {
   return (
@@ -354,6 +415,11 @@ function LegendSwatch({
       ) : dashed ? (
         <span
           className="w-4 h-0 border-t-2 border-dashed"
+          style={{ borderColor: color }}
+        />
+      ) : dotted ? (
+        <span
+          className="w-4 h-0 border-t-2 border-dotted"
           style={{ borderColor: color }}
         />
       ) : bar ? (

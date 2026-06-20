@@ -5,6 +5,7 @@ import type {
   TimeseriesPayload,
   CitizenReport,
   GetReportsPayload,
+  LakeArtifactsPayload,
 } from "./types";
 
 const API_BASE = (import.meta.env.VITE_API_BASE ?? "").replace(/\/+$/, "");
@@ -71,6 +72,8 @@ export const api = {
     request<RestorationEventsPayload>(
       `/api/restoration-events/${encodeURIComponent(lakeId)}`,
     ),
+  getLakeArtifacts: (lakeId: string) =>
+    request<LakeArtifactsPayload>(`/api/lake-artifacts/${encodeURIComponent(lakeId)}`),
   getHealth: () => request<HealthPayload>("/healthz"),
   getReports: () => request<GetReportsPayload>("/api/reports"),
   createReport: (body: Omit<CitizenReport, "id" | "created_at">) =>

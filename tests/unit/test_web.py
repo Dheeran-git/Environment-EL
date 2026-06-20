@@ -29,11 +29,11 @@ def test_index_renders(client: TestClient) -> None:
     assert "/lakes" in body
 
 
-def test_lakes_page_lists_all_six(client: TestClient) -> None:
+def test_lakes_page_lists_all_five(client: TestClient) -> None:
     response = client.get("/lakes")
     assert response.status_code == 200
     body = response.text
-    for lake_id in ("bellandur", "varthur", "hebbal", "ulsoor", "sankey", "agara"):
+    for lake_id in ("bellandur", "varthur", "hebbal", "ulsoor", "sankey"):
         assert f"/lakes/{lake_id}" in body or lake_id in body
 
 
@@ -53,7 +53,7 @@ def test_api_lakes_shape(client: TestClient) -> None:
     assert response.status_code == 200
     payload = response.json()
     assert "lakes" in payload and isinstance(payload["lakes"], list)
-    assert len(payload["lakes"]) >= 6
+    assert len(payload["lakes"]) >= 5
     first = payload["lakes"][0]
     assert {"id", "name", "geometry", "centroid"}.issubset(first)
 
@@ -107,7 +107,7 @@ def test_healthz(client: TestClient) -> None:
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "ok"
-    assert data["lake_count"] >= 6
+    assert data["lake_count"] >= 5
 
 
 def test_api_restoration_events(client: TestClient) -> None:

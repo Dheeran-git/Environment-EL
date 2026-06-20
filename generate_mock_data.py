@@ -70,12 +70,6 @@ def generate_mock_timeseries():
             "event_date": date(2022, 2, 1),
             "std_dev": 2.0
         },
-        "agara": {
-            "base_before": 72.0,
-            "base_after": 36.0,
-            "event_date": date(2021, 12, 20),
-            "std_dev": 2.2
-        },
         "sankey": {
             "base_before": 24.0,
             "base_after": 24.0,

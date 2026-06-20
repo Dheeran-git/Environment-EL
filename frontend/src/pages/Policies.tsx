@@ -25,7 +25,7 @@ export const POLICIES: PolicyAction[] = [
     category: "engineering",
     impact: 35,
     cost: "High",
-    description: "Intercept incoming raw sewage channels and treat effluents to tertiary standards before allowing inflow."
+    description: "Simple terms: Building mini water-treatment plants directly where raw sewer water enters the lake. Instead of letting smelly sewage flow straight into the lake, it is caught, cleaned up, and only clean water is released."
   },
   {
     id: "wetlands",
@@ -33,7 +33,7 @@ export const POLICIES: PolicyAction[] = [
     category: "ecological",
     impact: 20,
     cost: "Low",
-    description: "Install floating islands of macrophytes (canna, vetiver) to naturally absorb excess nitrogen and phosphorus."
+    description: "Simple terms: Artificial floating islands made of plants. The roots of these plants hang down into the water like a giant sponge, naturally absorbing pollutants (like nitrogen and phosphorus from sewage) and cleaning the lake."
   },
   {
     id: "aeration",
@@ -41,7 +41,7 @@ export const POLICIES: PolicyAction[] = [
     category: "engineering",
     impact: 15,
     cost: "Medium",
-    description: "Deploy mechanical aerators and fountains to raise dissolved oxygen (DO) levels, preventing fish kills."
+    description: "Simple terms: Big solar-powered bubbles or fountains in the middle of the lake. They stir the water and pump oxygen into it. This keeps the water fresh, prevents bad smells, and stops fish from suffocating."
   },
   {
     id: "desilting",
@@ -49,7 +49,7 @@ export const POLICIES: PolicyAction[] = [
     category: "engineering",
     impact: 15,
     cost: "High",
-    description: "Construct peripheral silt traps and perform periodic wet dredging to remove toxic accumulated heavy-metal sludge."
+    description: "Simple terms: Vacuuming up the thick, toxic mud and sand (silt) from the bottom of the lake, and building small barriers (traps) at the inlets to catch dirt before it enters. This makes the lake deeper and cleaner."
   },
   {
     id: "zld",
@@ -57,7 +57,7 @@ export const POLICIES: PolicyAction[] = [
     category: "policy",
     impact: 10,
     cost: "Medium",
-    description: "Strictly enforce KSPCB rules requiring nearby apartment complexes and industries to reuse all treated wastewater."
+    description: "Simple terms: A rule forcing nearby apartment buildings and factories to treat and reuse 100% of their wastewater inside their own properties (for gardening, toilets, etc.). They are legally blocked from dumping any wastewater outside."
   },
   {
     id: "community",
@@ -65,7 +65,7 @@ export const POLICIES: PolicyAction[] = [
     category: "policy",
     impact: 10,
     cost: "Low",
-    description: "Empower local resident associations (RWA) with legal oversight, routine patrolling, and garbage cleanup drives."
+    description: "Simple terms: Handing control over to local volunteers and community groups. Neighbors patrol the lake boundaries, report polluters, clean up plastic trash, and make sure the lake is looked after."
   }
 ];
 
@@ -208,76 +208,6 @@ export default function Policies() {
                 })}
               </ul>
             )}
-          </div>
-        </div>
-      </section>
-
-      {/* In-depth Scientific Restoration Guide */}
-      <section className="space-y-6 pt-4 border-t border-border">
-        <div className="flex items-center gap-2">
-          <Leaf className="w-5 h-5 text-accent" />
-          <h2 className="text-lg font-medium text-fg">In-Depth Lake Restoration Playbook</h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <h3 className="text-md font-semibold text-fg flex items-center gap-2">
-              <Droplet className="w-4 h-4 text-blue-400" />
-              1. Engineering Solutions
-            </h3>
-            <div className="text-[13.5px] leading-relaxed text-fg-muted space-y-3">
-              <p>
-                <strong>Sewage Diversion & Inflow Management:</strong> The root cause of eutrophication in Bangalore's lakes (such as Bellandur and Varthur) is the direct inflow of untreated domestic and industrial sewage. Creating diversion channels that route dry-weather flows to centralized or decentralized Sewage Treatment Plants (STPs) is critical.
-              </p>
-              <p>
-                <strong>Aeration Fountains:</strong> Deep lakes suffer from oxygen depletion (anoxia) at lower depths, which releases phosphates bound in sediments. Mechanical and solar aeration circulates oxygen, accelerating organic matter degradation and preventing foul odor emissions.
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-md font-semibold text-fg flex items-center gap-2">
-              <Filter className="w-4 h-4 text-green-400" />
-              2. Ecological Engineering (Bio-mimicry)
-            </h3>
-            <div className="text-[13.5px] leading-relaxed text-fg-muted space-y-3">
-              <p>
-                <strong>Constructed Wetlands:</strong> Using gravel beds and emergent vegetation at the mouth of the inlet acts as a natural mechanical and chemical pre-filter, stripping phosphates and heavy metals before the water enters the main lake body.
-              </p>
-              <p>
-                <strong>Floating Treatment Wetlands (FTWs):</strong> Floating rafts populated with native wetland species (e.g. Typha, Vetiver) develop extensive underwater root systems. These root zones create biofilms of beneficial nitrifying bacteria that feed on organic nutrients directly from the water column.
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-md font-semibold text-fg flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-purple-400" />
-              3. Regulatory Policies
-            </h3>
-            <div className="text-[13.5px] leading-relaxed text-fg-muted space-y-3">
-              <p>
-                <strong>Zero Liquid Discharge (ZLD):</strong> Initiated by the Karnataka State Pollution Control Board (KSPCB), ZLD policies require commercial developers and residential apartment complexes of &gt;50 units to treat all wastewater and reuse it within the property (for landscaping or flushing), ensuring zero runoff into the stormwater drain network.
-              </p>
-              <p>
-                <strong>Lake Buffer Zone Guidelines:</strong> Enforcing the National Green Tribunal (NGT) mandated buffer zones (75 meters from the lake boundary, 50 meters from primary storm drains) protects lakes from developmental encroachment and structural degradation.
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-md font-semibold text-fg flex items-center gap-2">
-              <Users className="w-4 h-4 text-yellow-400" />
-              4. Community & Civic Engagement
-            </h3>
-            <div className="text-[13.5px] leading-relaxed text-fg-muted space-y-3">
-              <p>
-                <strong>Community-Led Co-Management:</strong> The successful rejuvenation of lakes like Agara and Hebbal highlights the power of active citizen groups. Partnering with BBMP to execute Memorandum of Understandings (MoU) allows local resident associations to maintain walking tracks, schedule weeding drives, and protect local biodiversity.
-              </p>
-              <p>
-                <strong>Citizen Science Initiatives:</strong> Monitoring water quality using affordable DIY chemical testing kits and submitting local observations crowdsources a continuous data stream, holding civic bodies accountable.
-              </p>
-            </div>
           </div>
         </div>
       </section>

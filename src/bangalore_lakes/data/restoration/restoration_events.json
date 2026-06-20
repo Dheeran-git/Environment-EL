@@ -2,40 +2,48 @@
   "metadata": {
     "schema_version": 1,
     "source": "public announcements and media reports",
-    "generated_at": "2026-04-20"
+    "generated_at": "2026-06-20"
   },
   "events": [
     {
       "lake_id": "bellandur",
-      "event_date": "2020-11-15",
-      "title": "Interception and diversion sewage works phase update",
-      "source_url": "https://bwssb.karnataka.gov.in/",
-      "note": "Major cleanup and sewage diversion activity cited for Bellandur catchment.",
-      "confidence": 0.6
+      "event_date": "2025-05-09",
+      "title": "State Cabinet approval of ₹79.67 crore rejuvenation grant",
+      "source_url": "https://www.deccanherald.com/india/karnataka/bengaluru/greater-bengaluru-governance-act-to-take-effect-from-may-15-bbmp-stays-for-now-3533598",
+      "note": "State Cabinet approved an additional ₹79.67 crore to resume desilting and rejuvenation works at main inlets and wetlands (Iblur, HAL) after funding delays.",
+      "confidence": 0.9
     },
     {
       "lake_id": "varthur",
-      "event_date": "2021-06-10",
-      "title": "Foam mitigation and restoration package announcement",
-      "source_url": "https://bbmp.gov.in/",
-      "note": "Varthur restoration and desilting-related interventions announced.",
-      "confidence": 0.6
+      "event_date": "2025-07-23",
+      "title": "Legislative Committee Inspection and Restoration Mandate",
+      "source_url": "https://www.deccanherald.com/india/karnataka/bengaluru/encroachments-lack-of-fencing-foul-stenchanger-legislators-during-visit-to-4-lakes-in-bengaluru-3645252",
+      "note": "The legislative standing committee on Local Bodies inspected Varthur Lake, expressing concern over slow progress and ordering BDA to expedite boundary fencing and desilting before takeover.",
+      "confidence": 0.8
     },
     {
       "lake_id": "hebbal",
-      "event_date": "2022-02-01",
-      "title": "Lake rejuvenation and maintenance contract cycle",
-      "source_url": "https://bbmp.gov.in/",
-      "note": "Periodic rejuvenation actions referenced in civic updates.",
-      "confidence": 0.5
+      "event_date": "2025-07-31",
+      "title": "NDMF Rejuvenation and Flood Mitigation Fund Allocation",
+      "source_url": "https://www.thehindu.com/news/national/karnataka/seven-lakes-in-bengaluru-set-for-revival-civic-groups-urge-scientific-vigilance/article69861642.ece",
+      "note": "Under the National Disaster Mitigation Fund (NDMF), the government allocated ₹20 crore for Hebbal Lake's rejuvenation to increase storage capacity, desilt the wetland, and mitigate Outer Ring Road flooding.",
+      "confidence": 0.85
     },
     {
-      "lake_id": "agara",
-      "event_date": "2021-12-20",
-      "title": "Restoration completion announcement",
-      "source_url": "https://bbmp.gov.in/",
-      "note": "Agara restoration works reported as completed in this period.",
-      "confidence": 0.55
+      "lake_id": "ulsoor",
+      "event_date": "2025-07-31",
+      "title": "NDMF Rejuvenation and Desilting Fund Allocation",
+      "source_url": "https://www.thehindu.com/news/national/karnataka/seven-lakes-in-bengaluru-set-for-revival-civic-groups-urge-scientific-vigilance/article69861642.ece",
+      "note": "Earmarked NDMF funds for Halsur (Ulsoor) Lake rejuvenation, covering desilting, sediment trap repair, and kalyani restoration.",
+      "confidence": 0.85
+    },
+    {
+      "lake_id": "sankey",
+      "event_date": "2025-06-15",
+      "title": "BBMP Gabion Wall Construction and Erosion Control Project",
+      "source_url": "https://www.deccanherald.com/india/karnataka/bengaluru/bbmp-s-gabion-wall-proposal-for-sankey-tank-sparks-outrage-3586476",
+      "note": "BBMP proposed and commenced the construction of gabion structures to address soil erosion and prevent encroachments, sparking citizen protests over ecological concerns.",
+      "confidence": 0.8
     }
   ]
 }

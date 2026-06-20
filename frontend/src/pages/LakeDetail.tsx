@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Printer, Compass, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Compass, CheckCircle2 } from "lucide-react";
 import { api } from "../lib/api";
 import MetricStat from "../components/MetricStat";
 import ScorePill from "../components/ScorePill";
@@ -39,7 +39,8 @@ export default function LakeDetail() {
 
   const lake = lakesQuery.data?.lakes.find((l: Lake) => l.id === lakeId);
   const rows = seriesQuery.data?.data ?? [];
-  const latest = rows[rows.length - 1];
+  const validRows = rows.filter((row: any) => row.pixel_count > 0);
+  const latest = validRows[validRows.length - 1];
   const events = eventsQuery.data?.events ?? [];
 
   const totalImpact = selectedActions.reduce((acc, actionId) => {
@@ -80,19 +81,12 @@ export default function LakeDetail() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <button
-                onClick={() => window.print()}
-                className="px-3 py-1.5 rounded-lg border border-border bg-surface hover:bg-surface-2 text-fg hover:text-accent text-[12.5px] font-medium flex items-center gap-1.5 transition-all no-print"
-              >
-                <Printer className="w-3.5 h-3.5" />
-                Export Report Card
-              </button>
               {latest?.anomaly_flag && <AnomalyBadge mom={latest.mom_change_pct} />}
               <ScorePill score={latest?.pollution_score ?? lake.computed_pollution_score} />
             </div>
           </header>
 
-          <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+          <section className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
             <MetricStat
               label="Latest score"
               value={formatScore(latest?.pollution_score)}
@@ -108,12 +102,6 @@ export default function LakeDetail() {
               label="Months observed"
               value={rows.length}
               hint={rows.length > 0 ? `since ${rows[0].month_start.slice(0, 7)}` : undefined}
-            />
-            <MetricStat
-              label="Scenes this month"
-              value={latest?.scene_count ?? "—"}
-              hint={latest ? `${latest.pixel_count.toLocaleString()} pixels` : undefined}
-              tone="muted"
             />
           </section>
 
@@ -199,11 +187,11 @@ export default function LakeDetail() {
           </section>
 
           <section className="mb-5 no-print">
-            <h2 className="text-[11px] uppercase tracking-wider text-fg-muted mb-2">
-              Satellite Remote Sensing Band Analysis
-            </h2>
-            <SatelliteImagery />
-          </section>
+        <h2 className="text-[11px] uppercase tracking-wider text-fg-muted mb-2">
+          Satellite Remote Sensing Band Analysis
+        </h2>
+        <SatelliteImagery lakeId={lakeId} />
+      </section>
 
           <section>
             <h2 className="text-[11px] uppercase tracking-wider text-fg-muted mb-2">

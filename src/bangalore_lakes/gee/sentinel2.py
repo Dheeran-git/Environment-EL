@@ -20,8 +20,31 @@ log = get_logger(__name__)
 
 COLLECTION_ID = "COPERNICUS/S2_SR_HARMONIZED"
 RGB_BANDS = ("B4", "B3", "B2")
-RGB_VIS = {"min": 0, "max": 3000, "gamma": 1.4, "bands": list(RGB_BANDS)}
 ANALYTICS_BANDS = ("B3", "B4", "B8", "B11")
+# All 6 bands needed for both RGB display and NDWI/NDVI analytics
+ALL_VIS_BANDS = ("B2", "B3", "B4", "B8", "B11", "B12")
+
+# True-colour: stretch 0-2500 DN with gamma 1.8 makes water visibly
+# blue/brown instead of black (water reflectance ~200-800 DN in S2-SR).
+RGB_VIS = {"min": 0, "max": 2500, "gamma": 1.8, "bands": list(RGB_BANDS)}
+
+# NDWI false-colour: NIR(B8) / Green(B3) / SWIR(B11) combo
+# Water → bright blue-cyan, land → brown/red. Very distinct.
+NDWI_VIS = {
+    "min": 0,
+    "max": 2500,
+    "gamma": 1.6,
+    "bands": ["B3", "B8", "B11"],  # Green, NIR, SWIR → water pops cyan
+}
+
+# NDVI / algal-bloom mode: NIR(B8) / Red(B4) / Green(B3)
+# Dense algae / vegetation → bright green, open water → dark.
+NDVI_VIS = {
+    "min": 0,
+    "max": 2500,
+    "gamma": 1.6,
+    "bands": ["B8", "B4", "B3"],  # NIR, Red, Green
+}
 
 
 @dataclass(frozen=True)
@@ -115,11 +138,12 @@ def recent_composite(
     cloud_pct: float,
     end_date: date | None = None,
 ) -> tuple[ee.Image, CompositeInfo]:
-    """Return a cloud-filtered median RGB composite over ``aoi``.
+    """Return a cloud-filtered median composite over ``aoi`` with all vis bands.
 
-    The image is a 3-band RGB selection (B4/B3/B2) ready for visualization
-    or clipping. Raises :class:`RuntimeError` if the filtered collection is
-    empty.
+    Retains ALL_VIS_BANDS (B2,B3,B4,B8,B11,B12) so callers can render
+    true-colour (B4/B3/B2), NDWI false-colour (B3/B8/B11), and NDVI
+    algal-bloom (B8/B4/B3) thumbnails from one composite.
+    Raises :class:`RuntimeError` if the filtered collection is empty.
     """
     collection, descriptor = build_s2_collection(
         aoi, days=days, cloud_pct=cloud_pct, end_date=end_date
@@ -130,7 +154,7 @@ def recent_composite(
             f"(date={descriptor.start_date}..{descriptor.end_date}, "
             f"cloud_pct<={cloud_pct}). Try widening the window or threshold."
         )
-    composite = collection.median().select(list(RGB_BANDS))
+    composite = collection.median().select(list(ALL_VIS_BANDS))
     return composite, descriptor
 
 
@@ -177,9 +201,9 @@ def monthly_index_stats(
     ).getInfo()
     reduced = reduced or {}
     return {
-        "ndwi": float(reduced.get("ndwi_mean", 0.0)),
-        "ndvi": float(reduced.get("ndvi_mean", 0.0)),
-        "ndti": float(reduced.get("ndti_mean", 0.0)),
-        "pixel_count": int(reduced.get("ndwi_count", 0)),
+        "ndwi": float(reduced.get("ndwi_mean") or 0.0),
+        "ndvi": float(reduced.get("ndvi_mean") or 0.0),
+        "ndti": float(reduced.get("ndti_mean") or 0.0),
+        "pixel_count": int(reduced.get("ndwi_count") or 0),
         "scene_count": scene_count,
     }

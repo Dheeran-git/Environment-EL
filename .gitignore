@@ -26,9 +26,9 @@ env/
 *~
 .DS_Store
 
-# Project — keep the directories via .gitkeep, ignore their contents
-outputs/*
-!outputs/.gitkeep
+# Project — track outputs so friends can run it out of the box
+# outputs/*
+# !outputs/.gitkeep
 credentials/*
 !credentials/.gitkeep
 .env

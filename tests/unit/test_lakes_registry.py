@@ -9,7 +9,7 @@ import pytest
 from bangalore_lakes.lakes.models import PollutionLevel
 from bangalore_lakes.lakes.registry import load_collection, load_lakes
 
-EXPECTED_IDS = {"bellandur", "varthur", "hebbal", "ulsoor", "sankey", "agara"}
+EXPECTED_IDS = {"bellandur", "varthur", "hebbal", "ulsoor", "sankey"}
 
 
 def test_bundled_registry_loads() -> None:
