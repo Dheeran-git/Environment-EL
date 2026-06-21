@@ -80,8 +80,10 @@ export default function Dashboard() {
     <div className="p-6 max-w-[1400px] mx-auto space-y-6">
       <header className="flex flex-wrap justify-between items-start gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            Bangalore Lakes Dashboard
+          <h1 className="text-2xl font-semibold tracking-tight leading-tight">
+            Eco Lake Analytics: Satellite-Based Pollution Detection and{" "}
+            <br className="hidden md:inline" />
+            Environmental Audit Platform
           </h1>
           <p className="text-fg-muted mt-1 text-[13.5px]">
             Satellite-derived pollution scores for five named lakes. Click a lake
