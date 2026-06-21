@@ -158,27 +158,6 @@ export default function SatelliteImagery({ lakeId }: SatelliteImageryProps) {
           />
         </div>
       )}
-
-      {/* Explanatory Info Card */}
-      <div className="p-4 rounded-xl border border-border bg-surface flex items-start gap-3">
-        <Eye className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-        <div className="text-[12.5px] leading-relaxed text-fg-muted">
-          {currentBand === "ndwi" ? (
-            <p>
-              💡 <strong>Normalized Difference Water Index (NDWI)</strong> targets bands in the Near-Infrared (NIR) and Short-Wave Infrared (SWIR) spectra. NDWI is highly sensitive to liquid water molecules, reflecting water surfaces in bright neon blue while highlighting dry urban ground in dark reds and browns.
-            </p>
-          ) : (
-            <p>
-              💡 <strong>Normalized Difference Vegetation Index (NDVI)</strong> highlights chlorophyll concentrations. In this false-color band, dense algal blooms and surface floating weeds are mapped as bright green fields, distinguishing them from the dark open water channels.
-            </p>
-          )}
-          {hasImage && (
-            <p className="mt-1.5 text-[11px] font-mono text-fg-muted/70">
-              Source: Sentinel-2 composite · {artifactsQuery.data?.day2_run_id ?? "latest run"} · 10m/px · ESA Copernicus
-            </p>
-          )}
-        </div>
-      </div>
     </div>
   );
 }
