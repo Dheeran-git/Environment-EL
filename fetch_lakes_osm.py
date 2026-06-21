@@ -1,12 +1,12 @@
-import requests
 import json
-import urllib.parse
+
+import requests
 
 overpass_endpoints = [
     "https://lz4.overpass-api.de/api/interpreter",
     "https://z.overpass-api.de/api/interpreter",
     "https://overpass.kumi.systems/api/interpreter",
-    "https://overpass-api.de/api/interpreter"
+    "https://overpass-api.de/api/interpreter",
 ]
 
 overpass_query = """[out:json][timeout:60];
@@ -28,7 +28,7 @@ headers = {
 for ep in overpass_endpoints:
     print(f"Trying endpoint: {ep} ...")
     try:
-        response = requests.post(ep, data={'data': overpass_query}, headers=headers, timeout=30)
+        response = requests.post(ep, data={"data": overpass_query}, headers=headers, timeout=30)
         print("Status Code:", response.status_code)
         if response.status_code == 200:
             data = response.json()

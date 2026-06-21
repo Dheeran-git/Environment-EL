@@ -2,9 +2,11 @@
 Fetch accurate lake polygons from OSM Nominatim API for Bangalore lakes.
 Uses polygon=1 and polygon_geojson=1 to get actual boundary geometries.
 """
-import requests
+
 import json
 import time
+
+import requests
 
 lakes = [
     {"name": "Sankey Tank Bangalore", "id": "sankey"},
@@ -14,9 +16,7 @@ lakes = [
     {"name": "Ulsoor Lake Bangalore", "id": "ulsoor"},
 ]
 
-headers = {
-    "User-Agent": "BangaloreLakesWaterQuality/1.0 (research project)"
-}
+headers = {"User-Agent": "BangaloreLakesWaterQuality/1.0 (research project)"}
 
 results = {}
 
@@ -40,10 +40,14 @@ for lake in lakes:
         print(f"  Results: {len(data)}")
         for i, item in enumerate(data):
             print(f"    [{i}] {item.get('display_name', '?')[:80]}")
-            print(f"        type={item.get('type')}, class={item.get('class')}, osm_type={item.get('osm_type')}, osm_id={item.get('osm_id')}")
+            print(
+                f"        type={item.get('type')}, class={item.get('class')}, osm_type={item.get('osm_type')}, osm_id={item.get('osm_id')}"
+            )
             geojson = item.get("geojson")
             if geojson:
-                print(f"        geojson type={geojson.get('type')}, coords_len={len(str(geojson.get('coordinates',[])))}")
+                print(
+                    f"        geojson type={geojson.get('type')}, coords_len={len(str(geojson.get('coordinates',[])))}"
+                )
         # Pick the first result that has a Polygon/MultiPolygon geojson
         for item in data:
             geojson = item.get("geojson")
@@ -62,7 +66,7 @@ for lake in lakes:
             print(f"  WARNING: No polygon found for {lake['name']}")
     else:
         print(f"  Error: {resp.text[:200]}")
-    
+
     # Be nice to Nominatim: 1 request per second
     time.sleep(1.5)
 

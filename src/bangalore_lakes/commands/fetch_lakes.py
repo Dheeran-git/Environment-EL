@@ -16,7 +16,7 @@ from bangalore_lakes.commands._common import (
 from bangalore_lakes.config import Settings
 from bangalore_lakes.gee import export as gee_export
 from bangalore_lakes.gee import sentinel2
-from bangalore_lakes.gee.sentinel2 import NDWI_VIS, NDVI_VIS, RGB_VIS
+from bangalore_lakes.gee.sentinel2 import NDVI_VIS, NDWI_VIS, RGB_VIS
 from bangalore_lakes.gee.session import ensure_initialized
 from bangalore_lakes.lakes import Lake, load_collection
 from bangalore_lakes.logging_setup import get_logger
@@ -32,9 +32,9 @@ log = get_logger(__name__)
 class LakeArtifacts:
     lake_id: str
     dir: Path
-    thumb_png: Path          # true-colour RGB
-    thumb_ndwi_png: Path     # NDWI false-colour (water = cyan)
-    thumb_ndvi_png: Path     # NDVI algal-bloom (algae = green)
+    thumb_png: Path  # true-colour RGB
+    thumb_ndwi_png: Path  # NDWI false-colour (water = cyan)
+    thumb_ndvi_png: Path  # NDVI algal-bloom (algae = green)
     geotiff: Path | None
     metadata: Path
 

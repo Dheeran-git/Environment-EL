@@ -42,4 +42,3 @@ def detect_mom_anomalies(
         )
         prev = obs
     return updated
-

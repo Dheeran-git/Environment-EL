@@ -2,11 +2,12 @@
 Convert the Nominatim lake polygons into the pipeline's bangalore_lakes.geojson format.
 Simplifies polygons with too many vertices while preserving shape fidelity.
 """
-import json
-import math
 
-with open("nominatim_lakes.json", "r", encoding="utf-8") as f:
+import json
+
+with open("nominatim_lakes.json", encoding="utf-8") as f:
     nominatim = json.load(f)
+
 
 def simplify_polygon_ring(ring, max_points=60):
     """Simplify a polygon ring by keeping every Nth point. Always keeps first/last."""
@@ -19,6 +20,7 @@ def simplify_polygon_ring(ring, max_points=60):
         simplified.append(simplified[0])
     return simplified
 
+
 def compute_centroid(coords, geom_type):
     """Compute centroid from coordinates."""
     all_points = []
@@ -27,22 +29,21 @@ def compute_centroid(coords, geom_type):
     elif geom_type == "MultiPolygon":
         for poly in coords:
             all_points.extend(poly[0])  # outer ring of each polygon
-    
+
     if not all_points:
         return [0, 0]
-    
+
     lons = [p[0] for p in all_points]
     lats = [p[1] for p in all_points]
-    return [
-        round(sum(lons) / len(lons), 4),
-        round(sum(lats) / len(lats), 4)
-    ]
+    return [round(sum(lons) / len(lons), 4), round(sum(lats) / len(lats), 4)]
+
 
 def round_coords(coords, decimals=6):
     """Round all coordinate values."""
-    if isinstance(coords[0], (int, float)):
+    if isinstance(coords[0], int | float):
         return [round(c, decimals) for c in coords]
     return [round_coords(c, decimals) for c in coords]
+
 
 # Lake metadata (preserved from existing file)
 lake_metadata = {
@@ -54,7 +55,7 @@ lake_metadata = {
         "official_area_ha": 364.0,
         "known_pollution_level": "severe",
         "source": "OSM",
-        "notes": "Largest lake in Bangalore. Chronic foam and fire incidents from untreated sewage discharge."
+        "notes": "Largest lake in Bangalore. Chronic foam and fire incidents from untreated sewage discharge.",
     },
     "varthur": {
         "name": "Varthur Lake",
@@ -64,7 +65,7 @@ lake_metadata = {
         "official_area_ha": 220.0,
         "known_pollution_level": "severe",
         "source": "OSM",
-        "notes": "Downstream of Bellandur; receives overflow. Also prone to foam and fire."
+        "notes": "Downstream of Bellandur; receives overflow. Also prone to foam and fire.",
     },
     "hebbal": {
         "name": "Hebbal Lake",
@@ -74,7 +75,7 @@ lake_metadata = {
         "official_area_ha": 75.0,
         "known_pollution_level": "high",
         "source": "OSM",
-        "notes": "Adjacent to outer ring road and airport corridor. Subject to restoration efforts."
+        "notes": "Adjacent to outer ring road and airport corridor. Subject to restoration efforts.",
     },
     "ulsoor": {
         "name": "Ulsoor Lake",
@@ -84,7 +85,7 @@ lake_metadata = {
         "official_area_ha": 50.0,
         "known_pollution_level": "high",
         "source": "OSM",
-        "notes": "Central Bangalore, also known locally as Halasuru Lake. Irregular boat-shaped outline."
+        "notes": "Central Bangalore, also known locally as Halasuru Lake. Irregular boat-shaped outline.",
     },
     "sankey": {
         "name": "Sankey Tank",
@@ -94,8 +95,8 @@ lake_metadata = {
         "official_area_ha": 15.0,
         "known_pollution_level": "moderate",
         "source": "OSM",
-        "notes": "Built 1882 as a water-supply tank; tagged water=tank in OSM. Relatively well-maintained."
-    }
+        "notes": "Built 1882 as a water-supply tank; tagged water=tank in OSM. Relatively well-maintained.",
+    },
 }
 
 features = []
@@ -105,10 +106,12 @@ for lake_id in lake_order:
     nom = nominatim[lake_id]
     meta = lake_metadata[lake_id]
     geom = nom["geojson"]
-    
+
     # Simplify geometry
     if geom["type"] == "Polygon":
-        simplified_coords = [simplify_polygon_ring(ring, max_points=50) for ring in geom["coordinates"]]
+        simplified_coords = [
+            simplify_polygon_ring(ring, max_points=50) for ring in geom["coordinates"]
+        ]
         simplified_geom = {"type": "Polygon", "coordinates": round_coords(simplified_coords)}
     elif geom["type"] == "MultiPolygon":
         # For MultiPolygon, merge into a single polygon using the largest ring
@@ -119,9 +122,9 @@ for lake_id in lake_order:
         largest = max(all_rings, key=lambda r: len(r))
         simplified = simplify_polygon_ring(largest, max_points=50)
         simplified_geom = {"type": "Polygon", "coordinates": [round_coords(simplified)]}
-    
+
     centroid = compute_centroid(geom["coordinates"], geom["type"])
-    
+
     feature = {
         "type": "Feature",
         "properties": {
@@ -136,15 +139,17 @@ for lake_id in lake_order:
             "source": meta["source"],
             "osm_id": f"{nom['osm_type']}/{nom['osm_id']}",
             "last_verified": "2026-06-20",
-            "notes": meta["notes"]
+            "notes": meta["notes"],
         },
-        "geometry": simplified_geom
+        "geometry": simplified_geom,
     }
     features.append(feature)
-    
+
     orig_type = geom["type"]
     new_npts = len(simplified_geom["coordinates"][0])
-    print(f"  {lake_id}: {orig_type} -> Polygon with {new_npts} vertices, centroid={centroid}, osm_id={nom['osm_type']}/{nom['osm_id']}")
+    print(
+        f"  {lake_id}: {orig_type} -> Polygon with {new_npts} vertices, centroid={centroid}, osm_id={nom['osm_type']}/{nom['osm_id']}"
+    )
 
 geojson = {
     "type": "FeatureCollection",
@@ -152,9 +157,9 @@ geojson = {
         "generated_at": "2026-06-20",
         "source": "OSM Nominatim polygon export (see PROVENANCE.md)",
         "overpass_query_hash": None,
-        "schema_version": 1
+        "schema_version": 1,
     },
-    "features": features
+    "features": features,
 }
 
 output_path = "src/bangalore_lakes/data/lakes/bangalore_lakes.geojson"
