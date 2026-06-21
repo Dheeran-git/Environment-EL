@@ -12,7 +12,7 @@
     "anomaly_flag": false,
     "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -27,7 +27,7 @@
     "anomaly_flag": false,
     "mom_change_pct": 2.51,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -42,7 +42,7 @@
     "anomaly_flag": false,
     "mom_change_pct": -5.87,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -57,7 +57,7 @@
     "anomaly_flag": false,
     "mom_change_pct": -2.44,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -72,7 +72,7 @@
     "anomaly_flag": true,
     "mom_change_pct": 26.25,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -87,7 +87,7 @@
     "anomaly_flag": false,
     "mom_change_pct": 9.6,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -100,9 +100,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 1.34,
+    "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -115,9 +115,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
+    "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -130,9 +130,9 @@
     "pixel_count": 3525,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": -15.68,
+    "mom_change_pct": -14.55,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -145,9 +145,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 18.6,
+    "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -160,9 +160,9 @@
     "pixel_count": 3292,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": -16.18,
+    "mom_change_pct": -0.59,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -177,7 +177,7 @@
     "anomaly_flag": false,
     "mom_change_pct": -9.59,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -192,7 +192,7 @@
     "anomaly_flag": false,
     "mom_change_pct": 0.18,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -207,7 +207,7 @@
     "anomaly_flag": false,
     "mom_change_pct": -4.69,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -222,7 +222,7 @@
     "anomaly_flag": false,
     "mom_change_pct": -0.3,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -237,7 +237,7 @@
     "anomaly_flag": true,
     "mom_change_pct": 20.4,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -252,7 +252,7 @@
     "anomaly_flag": false,
     "mom_change_pct": 8.22,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -267,7 +267,7 @@
     "anomaly_flag": false,
     "mom_change_pct": 13.98,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -280,9 +280,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": -6.66,
+    "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -295,9 +295,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
+    "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -310,9 +310,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
+    "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -325,9 +325,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
+    "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -340,9 +340,9 @@
     "pixel_count": 2897,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": -11.76,
+    "mom_change_pct": -17.64,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -357,7 +357,7 @@
     "anomaly_flag": false,
     "mom_change_pct": 4.62,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -372,7 +372,7 @@
     "anomaly_flag": false,
     "mom_change_pct": -1.73,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -387,7 +387,7 @@
     "anomaly_flag": false,
     "mom_change_pct": -5.16,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -402,7 +402,7 @@
     "anomaly_flag": false,
     "mom_change_pct": 8.02,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -415,9 +415,9 @@
     "pixel_count": 0,
     "scene_count": 6,
     "anomaly_flag": false,
-    "mom_change_pct": 7.6,
+    "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -430,9 +430,9 @@
     "pixel_count": 13,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": -1.12,
+    "mom_change_pct": 6.39,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   },
   {
     "lake_id": "hebbal",
@@ -445,8 +445,8 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 1.13,
+    "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.14
   }
 ]

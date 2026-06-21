@@ -22,8 +22,8 @@ def evaluate_restoration_verdict(
     event_date: date,
     window_months: int = 6,
 ) -> RestorationVerdict:
-    pre = [o.pollution_score for o in observations if o.month_start < event_date][-window_months:]
-    post = [o.pollution_score for o in observations if o.month_start >= event_date][:window_months]
+    pre = [o.pollution_score for o in observations if o.month_start < event_date and o.pixel_count > 0][-window_months:]
+    post = [o.pollution_score for o in observations if o.month_start >= event_date and o.pixel_count > 0][:window_months]
     if not pre or not post:
         return RestorationVerdict(
             label="insufficient_data", confidence=0.0, pre_avg=0.0, post_avg=0.0

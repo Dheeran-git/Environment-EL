@@ -12,7 +12,7 @@
     "anomaly_flag": false,
     "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -27,7 +27,7 @@
     "anomaly_flag": false,
     "mom_change_pct": 10.6,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -42,7 +42,7 @@
     "anomaly_flag": false,
     "mom_change_pct": -9.97,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -57,7 +57,7 @@
     "anomaly_flag": false,
     "mom_change_pct": -16.77,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -72,7 +72,7 @@
     "anomaly_flag": false,
     "mom_change_pct": 19.7,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -87,7 +87,7 @@
     "anomaly_flag": true,
     "mom_change_pct": 26.1,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -100,9 +100,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 6.47,
+    "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -115,9 +115,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
+    "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -130,9 +130,9 @@
     "pixel_count": 2758,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": -10.0,
+    "mom_change_pct": -4.17,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -145,9 +145,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 11.11,
+    "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -160,9 +160,9 @@
     "pixel_count": 3124,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": -22.68,
+    "mom_change_pct": -14.09,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -177,7 +177,7 @@
     "anomaly_flag": false,
     "mom_change_pct": 3.78,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -192,7 +192,7 @@
     "anomaly_flag": false,
     "mom_change_pct": -4.49,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -207,7 +207,7 @@
     "anomaly_flag": false,
     "mom_change_pct": -12.4,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -222,7 +222,7 @@
     "anomaly_flag": false,
     "mom_change_pct": -15.88,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -237,7 +237,7 @@
     "anomaly_flag": false,
     "mom_change_pct": 11.76,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -252,7 +252,7 @@
     "anomaly_flag": true,
     "mom_change_pct": 26.08,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -267,7 +267,7 @@
     "anomaly_flag": true,
     "mom_change_pct": 20.43,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -280,9 +280,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 4.34,
+    "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -295,9 +295,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
+    "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -310,9 +310,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
+    "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -325,9 +325,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
+    "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -340,9 +340,9 @@
     "pixel_count": 3363,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": -25.96,
+    "mom_change_pct": -22.75,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -357,7 +357,7 @@
     "anomaly_flag": false,
     "mom_change_pct": -17.86,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -372,7 +372,7 @@
     "anomaly_flag": false,
     "mom_change_pct": 9.57,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -387,7 +387,7 @@
     "anomaly_flag": true,
     "mom_change_pct": 24.01,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -402,7 +402,7 @@
     "anomaly_flag": true,
     "mom_change_pct": 37.66,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -415,9 +415,9 @@
     "pixel_count": 0,
     "scene_count": 6,
     "anomaly_flag": false,
-    "mom_change_pct": -12.1,
+    "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -430,9 +430,9 @@
     "pixel_count": 1811,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": -14.04,
+    "mom_change_pct": -24.44,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   },
   {
     "lake_id": "ulsoor",
@@ -445,8 +445,8 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 16.33,
+    "mom_change_pct": null,
     "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.13
+    "restoration_confidence": 0.15
   }
 ]

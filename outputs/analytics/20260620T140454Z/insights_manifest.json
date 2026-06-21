@@ -3,32 +3,32 @@
     "bellandur": {
       "anomaly_count": 1,
       "restoration_events": 1,
-      "restoration_verdict": "unchanged",
-      "restoration_confidence": 0.06
+      "restoration_verdict": "worsened",
+      "restoration_confidence": 0.25
     },
     "hebbal": {
       "anomaly_count": 2,
       "restoration_events": 1,
       "restoration_verdict": "unchanged",
-      "restoration_confidence": 0.13
+      "restoration_confidence": 0.14
     },
     "sankey": {
       "anomaly_count": 3,
       "restoration_events": 1,
-      "restoration_verdict": "worsened",
-      "restoration_confidence": 0.37
+      "restoration_verdict": "unchanged",
+      "restoration_confidence": 0.01
     },
     "ulsoor": {
       "anomaly_count": 5,
       "restoration_events": 1,
       "restoration_verdict": "unchanged",
-      "restoration_confidence": 0.13
+      "restoration_confidence": 0.15
     },
     "varthur": {
-      "anomaly_count": 2,
+      "anomaly_count": 1,
       "restoration_events": 1,
-      "restoration_verdict": "unchanged",
-      "restoration_confidence": 0.09
+      "restoration_verdict": "improved",
+      "restoration_confidence": 0.35
     }
   }
 }

@@ -11,8 +11,8 @@
     "scene_count": 2,
     "anomaly_flag": false,
     "mom_change_pct": null,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -26,8 +26,8 @@
     "scene_count": 5,
     "anomaly_flag": false,
     "mom_change_pct": -4.46,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -41,8 +41,8 @@
     "scene_count": 6,
     "anomaly_flag": false,
     "mom_change_pct": -7.13,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -56,8 +56,8 @@
     "scene_count": 4,
     "anomaly_flag": false,
     "mom_change_pct": -9.12,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -71,8 +71,8 @@
     "scene_count": 1,
     "anomaly_flag": true,
     "mom_change_pct": 34.42,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -86,8 +86,8 @@
     "scene_count": 1,
     "anomaly_flag": false,
     "mom_change_pct": 9.72,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -100,9 +100,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": -0.26,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "mom_change_pct": null,
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -115,9 +115,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "mom_change_pct": null,
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -130,9 +130,9 @@
     "pixel_count": 1078,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": -12.0,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "mom_change_pct": -12.23,
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -145,9 +145,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 13.64,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "mom_change_pct": null,
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -160,9 +160,9 @@
     "pixel_count": 916,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": -15.62,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "mom_change_pct": -4.11,
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -176,8 +176,8 @@
     "scene_count": 1,
     "anomaly_flag": false,
     "mom_change_pct": -5.78,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -191,8 +191,8 @@
     "scene_count": 4,
     "anomaly_flag": false,
     "mom_change_pct": 2.11,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -206,8 +206,8 @@
     "scene_count": 5,
     "anomaly_flag": false,
     "mom_change_pct": -20.0,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -221,8 +221,8 @@
     "scene_count": 5,
     "anomaly_flag": false,
     "mom_change_pct": -4.1,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -236,8 +236,8 @@
     "scene_count": 6,
     "anomaly_flag": false,
     "mom_change_pct": 1.28,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -251,8 +251,8 @@
     "scene_count": 2,
     "anomaly_flag": true,
     "mom_change_pct": 25.78,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -266,8 +266,8 @@
     "scene_count": 1,
     "anomaly_flag": true,
     "mom_change_pct": 23.07,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -280,9 +280,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 2.42,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "mom_change_pct": null,
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -295,9 +295,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "mom_change_pct": null,
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -310,9 +310,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "mom_change_pct": null,
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -325,9 +325,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "mom_change_pct": null,
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -340,9 +340,9 @@
     "pixel_count": 931,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": -13.9,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "mom_change_pct": -11.82,
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -356,8 +356,8 @@
     "scene_count": 3,
     "anomaly_flag": false,
     "mom_change_pct": -13.7,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -371,8 +371,8 @@
     "scene_count": 4,
     "anomaly_flag": false,
     "mom_change_pct": -3.66,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -386,8 +386,8 @@
     "scene_count": 4,
     "anomaly_flag": false,
     "mom_change_pct": -10.45,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -401,8 +401,8 @@
     "scene_count": 7,
     "anomaly_flag": false,
     "mom_change_pct": 14.51,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -416,8 +416,8 @@
     "scene_count": 6,
     "anomaly_flag": false,
     "mom_change_pct": 2.92,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -431,8 +431,8 @@
     "scene_count": 1,
     "anomaly_flag": false,
     "mom_change_pct": 18.59,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   },
   {
     "lake_id": "sankey",
@@ -445,8 +445,8 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 11.63,
-    "restoration_verdict": "worsened",
-    "restoration_confidence": 0.37
+    "mom_change_pct": null,
+    "restoration_verdict": "unchanged",
+    "restoration_confidence": 0.01
   }
 ]

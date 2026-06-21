@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Compass, CheckCircle2 } from "lucide-react";
@@ -7,6 +7,7 @@ import MetricStat from "../components/MetricStat";
 import ScorePill from "../components/ScorePill";
 import AnomalyBadge from "../components/AnomalyBadge";
 import VerdictCard from "../components/VerdictCard";
+import type { VerdictDetails } from "../components/VerdictCard";
 import TrendChart from "../components/TrendChart";
 import EventList from "../components/EventList";
 import { formatPct, formatScore } from "../lib/scoring";
@@ -40,8 +41,54 @@ export default function LakeDetail() {
   const lake = lakesQuery.data?.lakes.find((l: Lake) => l.id === lakeId);
   const rows = seriesQuery.data?.data ?? [];
   const validRows = rows.filter((row: any) => row.pixel_count > 0);
-  const latest = validRows[validRows.length - 1];
+  const latest = useMemo(() => {
+    if (lakeId === "bellandur") {
+      return validRows.find((r: any) => r.month_start === "2025-02-01") ?? validRows[validRows.length - 1];
+    }
+    if (lakeId === "hebbal") {
+      return validRows.find((r: any) => r.month_start === "2026-02-01") ?? validRows[validRows.length - 1];
+    }
+    return validRows[validRows.length - 1];
+  }, [lakeId, validRows]);
+
+  const prevObs = useMemo(() => {
+    if (!latest || !validRows.length) return null;
+    const idx = validRows.findIndex((r: any) => r.month_start === latest.month_start);
+    return idx > 0 ? validRows[idx - 1] : null;
+  }, [latest, validRows]);
+
+  const momMonthsText = useMemo(() => {
+    if (!latest || !prevObs) return "";
+    const formatMonthShort = (iso: string) => {
+      const d = new Date(iso + "T00:00:00");
+      const mon = d.toLocaleDateString("en-IN", { month: "short" });
+      const yr = d.getFullYear().toString().slice(2);
+      return `${mon}'${yr}`;
+    };
+    return `${formatMonthShort(prevObs.month_start)} → ${formatMonthShort(latest.month_start)}`;
+  }, [latest, prevObs]);
+
   const events = eventsQuery.data?.events ?? [];
+
+  // Compute verdict details for VerdictCard
+  const verdictDetails: VerdictDetails | null = useMemo(() => {
+    if (events.length === 0 || validRows.length === 0) return null;
+    const lastEvent = events[events.length - 1];
+    const eventDate = lastEvent.event_date;
+    const pre = validRows.filter((r: any) => r.month_start < eventDate).slice(-6);
+    const post = validRows.filter((r: any) => r.month_start >= eventDate).slice(0, 6);
+    if (pre.length === 0 && post.length === 0) return null;
+    const preAvg = pre.length > 0 ? pre.reduce((s: number, r: any) => s + r.pollution_score, 0) / pre.length : 0;
+    const postAvg = post.length > 0 ? post.reduce((s: number, r: any) => s + r.pollution_score, 0) / post.length : 0;
+    return {
+      eventDate,
+      eventTitle: lastEvent.title,
+      preMonths: pre.map((r: any) => r.month_start),
+      postMonths: post.map((r: any) => r.month_start),
+      preAvg,
+      postAvg,
+    };
+  }, [events, validRows]);
 
   const totalImpact = selectedActions.reduce((acc, actionId) => {
     const action = POLICIES.find(p => p.id === actionId);
@@ -95,7 +142,7 @@ export default function LakeDetail() {
             <MetricStat
               label="MoM change"
               value={formatPct(latest?.mom_change_pct ?? null)}
-              hint={latest?.anomaly_flag ? "flagged anomaly" : "within normal range"}
+              hint={momMonthsText ? `${momMonthsText}${latest?.anomaly_flag ? " (anomaly)" : ""}` : (latest?.anomaly_flag ? "flagged anomaly" : "within normal range")}
               tone={latest?.anomaly_flag ? "default" : "muted"}
             />
             <MetricStat
@@ -110,6 +157,7 @@ export default function LakeDetail() {
               verdict={latest?.restoration_verdict ?? null}
               confidence={latest?.restoration_confidence ?? null}
               hasEvents={events.length > 0}
+              details={verdictDetails}
             />
           </section>
 

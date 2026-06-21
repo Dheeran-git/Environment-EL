@@ -11,8 +11,8 @@
     "scene_count": 2,
     "anomaly_flag": false,
     "mom_change_pct": null,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -26,8 +26,8 @@
     "scene_count": 5,
     "anomaly_flag": false,
     "mom_change_pct": 14.03,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -41,8 +41,8 @@
     "scene_count": 6,
     "anomaly_flag": false,
     "mom_change_pct": -10.1,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -56,8 +56,8 @@
     "scene_count": 4,
     "anomaly_flag": false,
     "mom_change_pct": 7.52,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -70,9 +70,9 @@
     "pixel_count": 0,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": 13.84,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": null,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -85,9 +85,9 @@
     "pixel_count": 0,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": null,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -100,9 +100,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": null,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -115,9 +115,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": null,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -130,9 +130,9 @@
     "pixel_count": 1446,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": -5.66,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": 7.4,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -145,9 +145,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 6.0,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": null,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -160,9 +160,9 @@
     "pixel_count": 2391,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": -30.24,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": -26.05,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -176,8 +176,8 @@
     "scene_count": 1,
     "anomaly_flag": true,
     "mom_change_pct": 23.74,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -191,8 +191,8 @@
     "scene_count": 4,
     "anomaly_flag": false,
     "mom_change_pct": 14.23,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -206,8 +206,8 @@
     "scene_count": 5,
     "anomaly_flag": false,
     "mom_change_pct": -8.84,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -221,8 +221,8 @@
     "scene_count": 5,
     "anomaly_flag": false,
     "mom_change_pct": 9.48,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -235,9 +235,9 @@
     "pixel_count": 0,
     "scene_count": 6,
     "anomaly_flag": false,
-    "mom_change_pct": 1.63,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": null,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -250,9 +250,9 @@
     "pixel_count": 0,
     "scene_count": 2,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": null,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -265,9 +265,9 @@
     "pixel_count": 1094,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": 0.24,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": 1.87,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -280,9 +280,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": -0.24,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": null,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -295,9 +295,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": null,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -310,9 +310,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": null,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -325,9 +325,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": null,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -340,9 +340,9 @@
     "pixel_count": 628,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": -7.66,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": -7.88,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -356,8 +356,8 @@
     "scene_count": 3,
     "anomaly_flag": false,
     "mom_change_pct": 6.04,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -370,9 +370,9 @@
     "pixel_count": 0,
     "scene_count": 4,
     "anomaly_flag": false,
-    "mom_change_pct": 2.12,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": null,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -385,9 +385,9 @@
     "pixel_count": 3,
     "scene_count": 4,
     "anomaly_flag": false,
-    "mom_change_pct": 3.18,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": 5.37,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -401,8 +401,8 @@
     "scene_count": 7,
     "anomaly_flag": false,
     "mom_change_pct": 0.25,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -415,9 +415,9 @@
     "pixel_count": 0,
     "scene_count": 6,
     "anomaly_flag": false,
-    "mom_change_pct": -3.33,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": null,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -430,9 +430,9 @@
     "pixel_count": 1,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": 15.22,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": 11.39,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   },
   {
     "lake_id": "bellandur",
@@ -445,8 +445,8 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": -13.21,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.06
+    "mom_change_pct": null,
+    "restoration_verdict": "worsened",
+    "restoration_confidence": 0.25
   }
 ]

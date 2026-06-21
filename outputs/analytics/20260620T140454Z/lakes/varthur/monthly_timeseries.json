@@ -11,8 +11,8 @@
     "scene_count": 2,
     "anomaly_flag": false,
     "mom_change_pct": null,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -26,8 +26,8 @@
     "scene_count": 5,
     "anomaly_flag": false,
     "mom_change_pct": 8.39,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -41,8 +41,8 @@
     "scene_count": 6,
     "anomaly_flag": false,
     "mom_change_pct": -1.44,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -56,8 +56,8 @@
     "scene_count": 4,
     "anomaly_flag": false,
     "mom_change_pct": -3.3,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -71,8 +71,8 @@
     "scene_count": 1,
     "anomaly_flag": false,
     "mom_change_pct": 8.88,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -85,9 +85,9 @@
     "pixel_count": 0,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": -6.02,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "mom_change_pct": null,
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -100,9 +100,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "mom_change_pct": null,
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -115,9 +115,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "mom_change_pct": null,
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -130,9 +130,9 @@
     "pixel_count": 2453,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": -14.92,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "mom_change_pct": -20.04,
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -145,9 +145,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 17.54,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "mom_change_pct": null,
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -160,9 +160,9 @@
     "pixel_count": 1215,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": -6.28,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "mom_change_pct": 10.16,
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -176,8 +176,8 @@
     "scene_count": 1,
     "anomaly_flag": false,
     "mom_change_pct": 1.92,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -191,8 +191,8 @@
     "scene_count": 4,
     "anomaly_flag": false,
     "mom_change_pct": -5.09,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -206,8 +206,8 @@
     "scene_count": 5,
     "anomaly_flag": false,
     "mom_change_pct": -19.46,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -221,8 +221,8 @@
     "scene_count": 5,
     "anomaly_flag": false,
     "mom_change_pct": 6.35,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -236,8 +236,8 @@
     "scene_count": 6,
     "anomaly_flag": false,
     "mom_change_pct": 8.14,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -251,8 +251,8 @@
     "scene_count": 2,
     "anomaly_flag": false,
     "mom_change_pct": 16.08,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -266,8 +266,8 @@
     "scene_count": 1,
     "anomaly_flag": false,
     "mom_change_pct": -4.68,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -280,9 +280,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 7.62,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "mom_change_pct": null,
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -295,9 +295,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "mom_change_pct": null,
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -310,9 +310,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "mom_change_pct": null,
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -325,9 +325,9 @@
     "pixel_count": 0,
     "scene_count": 0,
     "anomaly_flag": false,
-    "mom_change_pct": 0.0,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "mom_change_pct": null,
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -340,9 +340,9 @@
     "pixel_count": 9229,
     "scene_count": 1,
     "anomaly_flag": false,
-    "mom_change_pct": -27.54,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "mom_change_pct": -22.02,
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -356,8 +356,8 @@
     "scene_count": 3,
     "anomaly_flag": false,
     "mom_change_pct": -18.13,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -371,8 +371,8 @@
     "scene_count": 4,
     "anomaly_flag": false,
     "mom_change_pct": 14.23,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -386,8 +386,8 @@
     "scene_count": 4,
     "anomaly_flag": false,
     "mom_change_pct": -10.83,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -401,8 +401,8 @@
     "scene_count": 7,
     "anomaly_flag": false,
     "mom_change_pct": 1.89,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -416,8 +416,8 @@
     "scene_count": 6,
     "anomaly_flag": true,
     "mom_change_pct": 42.72,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -431,8 +431,8 @@
     "scene_count": 1,
     "anomaly_flag": false,
     "mom_change_pct": -9.54,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   },
   {
     "lake_id": "varthur",
@@ -444,9 +444,9 @@
     "pollution_score": 50.0,
     "pixel_count": 0,
     "scene_count": 0,
-    "anomaly_flag": true,
-    "mom_change_pct": 25.82,
-    "restoration_verdict": "unchanged",
-    "restoration_confidence": 0.09
+    "anomaly_flag": false,
+    "mom_change_pct": null,
+    "restoration_verdict": "improved",
+    "restoration_confidence": 0.35
   }
 ]

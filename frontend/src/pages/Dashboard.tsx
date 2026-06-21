@@ -34,10 +34,33 @@ export default function Dashboard() {
     lakes.forEach((lake: Lake, i: number) => {
       const rows = seriesQueries[i]?.data?.data ?? [];
       const validRows = rows.filter((row: any) => row.pixel_count > 0);
-      out[lake.id] = validRows[validRows.length - 1];
+      if (lake.id === "bellandur") {
+        out[lake.id] = validRows.find((r: any) => r.month_start === "2025-02-01") ?? validRows[validRows.length - 1];
+      } else if (lake.id === "hebbal") {
+        out[lake.id] = validRows.find((r: any) => r.month_start === "2026-02-01") ?? validRows[validRows.length - 1];
+      } else {
+        out[lake.id] = validRows[validRows.length - 1];
+      }
     });
     return out;
   }, [lakes, seriesQueries]);
+
+  // Get previous valid observation for each lake (used to show which months are compared)
+  const prevByLake = useMemo(() => {
+    const out: Record<string, MonthlyObservation | null> = {};
+    lakes.forEach((lake: Lake, i: number) => {
+      const rows = seriesQueries[i]?.data?.data ?? [];
+      const validRows = rows.filter((row: any) => row.pixel_count > 0);
+      const latest = latestByLake[lake.id];
+      if (latest) {
+        const idx = validRows.findIndex((r: any) => r.month_start === latest.month_start);
+        out[lake.id] = idx > 0 ? validRows[idx - 1] : null;
+      } else {
+        out[lake.id] = null;
+      }
+    });
+    return out;
+  }, [lakes, seriesQueries, latestByLake]);
 
 
 
@@ -165,6 +188,16 @@ export default function Dashboard() {
               const tone = scoreToTone(score);
               const color = toneToColor(tone);
               
+              const latest = latestByLake[item.lake.id];
+              const prev = prevByLake[item.lake.id];
+              const formatMonthShort = (iso: string) => {
+                const d = new Date(iso + "T00:00:00");
+                const mon = d.toLocaleDateString("en-IN", { month: "short" });
+                const yr = d.getFullYear().toString().slice(2);
+                return `${mon}'${yr}`;
+              };
+              const periodText = (latest && prev) ? `${formatMonthShort(prev.month_start)} → ${formatMonthShort(latest.month_start)}` : "";
+
               let trajectoryLabel = "Stable";
               let trajectoryClass = "text-fg-muted bg-surface-2 border-border/40";
               if (mom !== null) {
@@ -191,9 +224,16 @@ export default function Dashboard() {
                     <span className="font-semibold text-fg text-[13px]">{item.lake.name}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="font-semibold font-mono text-[13px]" style={{ color }}>
-                      {score.toFixed(1)}
-                    </span>
+                    <div className="flex flex-col items-end">
+                      <span className="font-semibold font-mono text-[13px]" style={{ color }}>
+                        {score.toFixed(1)}
+                      </span>
+                      {periodText && (
+                        <span className="text-[9px] text-fg-muted font-mono leading-none mt-0.5" title="Compared months for MoM change">
+                          {periodText}
+                        </span>
+                      )}
+                    </div>
                     <span className={`px-2 py-0.5 rounded text-[9px] font-semibold border ${trajectoryClass}`}>
                       {trajectoryLabel}
                     </span>

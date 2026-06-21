@@ -13,10 +13,23 @@ def detect_mom_anomalies(
     updated: list[LakeMonthlyObservation] = []
     prev: LakeMonthlyObservation | None = None
     for obs in observations:
+        if obs.pixel_count == 0:
+            updated.append(
+                LakeMonthlyObservation(
+                    **{
+                        **obs.__dict__,
+                        "mom_change_pct": None,
+                        "anomaly_flag": False,
+                    }
+                )
+            )
+            continue
+
         if prev is None or prev.pollution_score == 0:
             updated.append(obs)
             prev = obs
             continue
+
         change = ((obs.pollution_score - prev.pollution_score) / prev.pollution_score) * 100.0
         updated.append(
             LakeMonthlyObservation(
@@ -29,3 +42,4 @@ def detect_mom_anomalies(
         )
         prev = obs
     return updated
+
