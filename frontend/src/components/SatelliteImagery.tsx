@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Eye, Sparkles, Layers, ImageOff, Loader2 } from "lucide-react";
+import { Sparkles, Layers, ImageOff, Loader2 } from "lucide-react";
 import { api } from "../lib/api";
 
 interface SatelliteImageryProps {

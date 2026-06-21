@@ -1,13 +1,5 @@
 import { useState } from "react";
-import { 
-  Droplet, 
-  Filter, 
-  Compass, 
-  ShieldCheck, 
-  Users, 
-  Leaf, 
-  CheckCircle2
-} from "lucide-react";
+import { Compass, CheckCircle2 } from "lucide-react";
 
 export interface PolicyAction {
   id: string;

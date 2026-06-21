@@ -1,4 +1,4 @@
-import { useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { api } from "../lib/api";
 import LakeMap from "../components/LakeMap";
@@ -9,8 +9,7 @@ import type { Lake, MonthlyObservation } from "../lib/types";
 import { Trophy } from "lucide-react";
 
 export default function Dashboard() {
-  const queryClient = useQueryClient();
-  const lakesQuery = useQuery({ 
+  const lakesQuery = useQuery({
     queryKey: ["lakes"], 
     queryFn: api.getLakes,
     staleTime: 0,

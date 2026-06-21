@@ -2,7 +2,6 @@ import { useState, useMemo } from "react";
 import {
   CartesianGrid,
   Dot,
-  Label,
   Line,
   LineChart,
   Bar,
