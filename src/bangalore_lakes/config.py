@@ -42,7 +42,7 @@ class Settings(BaseSettings):
     default_crs: str = Field(default="EPSG:32643")
     analytics_start_year: int = Field(default=2020, ge=2015, le=2100)
 
-    output_dir: Path = Field(default=Path("outputs"))
+    output_dir: Path = Field(default=Path(__file__).parent.parent.parent.resolve() / "outputs")
     lakes_geojson: Path | None = Field(
         default=None,
         description="Override the bundled lake GeoJSON path.",
