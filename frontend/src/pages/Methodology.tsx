@@ -1,134 +1,102 @@
+import { Badge, Card, Tag } from "../design/ds";
+import { Icon } from "../design/icons";
+import type { IconName } from "../design/icons";
+import { Reveal } from "../design/motion";
+
+const STEPS: { icon: IconName; k: string; t: string; d: string }[] = [
+  { icon: "satellite", k: "01", t: "Sentinel-2", d: "Monthly median composite, cloud < 20%, 10 m, clipped per lake." },
+  { icon: "waves", k: "02", t: "Spectral indices", d: "NDWI water · NDVI vegetation · NDTI turbidity, over lit water pixels." },
+  { icon: "activity", k: "03", t: "Pollution score", d: "Weighted sum, normalised and clamped to 0–100." },
+  { icon: "checkCircle", k: "04", t: "Verdict", d: "Plain-language band + did-restoration-work comparison." },
+];
+const WEIGHTS = [
+  { label: "NDTI · turbidity", w: 40, color: "var(--data-high)" },
+  { label: "NDWI · less water", w: 35, color: "var(--primary)" },
+  { label: "NDVI · greening", w: 25, color: "var(--data-pristine)" },
+];
+
+function H2({ children }: { children: React.ReactNode }) {
+  return <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 27, letterSpacing: "-0.02em", color: "var(--ink)", margin: "0 0 12px" }}>{children}</h2>;
+}
+function P({ children }: { children: React.ReactNode }) {
+  return <p style={{ fontFamily: "var(--font-ui)", fontSize: 16, lineHeight: 1.65, color: "var(--ink)", margin: "0 0 14px", maxWidth: "64ch" }}>{children}</p>;
+}
+function Mono({ children }: { children: React.ReactNode }) {
+  return <code style={{ fontFamily: "var(--font-mono)", fontSize: 13.5, background: "var(--surface-alt)", border: "1px solid var(--border-hairline)", borderRadius: 6, padding: "1px 6px", color: "var(--primary-ink)" }}>{children}</code>;
+}
+
 export default function Methodology() {
   return (
-    <article className="p-6 max-w-[760px] mx-auto text-[14px] leading-[1.65]">
-      <header className="mb-6">
-        <h1 className="text-2xl font-semibold tracking-tight">Methodology</h1>
-        <p className="text-fg-muted mt-1">
-          How we turn raw Sentinel-2 scenes into monthly pollution scores, anomaly
-          flags, and "did restoration work?" verdicts.
-        </p>
-      </header>
+    <div style={{ padding: "40px 32px 72px", maxWidth: 960, margin: "0 auto" }}>
+      <p style={{ fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--primary-ink)", margin: 0 }}>How the score works</p>
+      <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 46, lineHeight: 1.04, letterSpacing: "-0.02em", color: "var(--ink)", margin: "10px 0 14px", textWrap: "pretty" }}>
+        From a satellite pass to a plain-language verdict.
+      </h1>
+      <p style={{ fontFamily: "var(--font-ui)", fontSize: 18, color: "var(--ink-muted)", lineHeight: 1.55, maxWidth: "62ch", margin: "0 0 32px" }}>
+        Every month we turn raw Sentinel-2 scenes into a single 0–100 pollution score, an anomaly flag, and a "did restoration work?" verdict. Here's the whole pipeline, in the open.
+      </p>
 
-      <Section title="1. Data source">
-        <p>
-          We use the <Mono>COPERNICUS/S2_SR_HARMONIZED</Mono> image collection in
-          Google Earth Engine — surface-reflectance Sentinel-2 scenes harmonized
-          across the 2022 processing baseline break. Scenes are filtered to
-          <Mono>CLOUDY_PIXEL_PERCENTAGE &lt; 20</Mono> (configurable) and composited
-          per calendar month with a pixel-wise median. All exports are projected
-          to <Mono>EPSG:32643</Mono> (UTM 43N) at a 10 m pixel scale.
-        </p>
-      </Section>
+      {/* Pipeline diagram */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0, marginBottom: 40 }}>
+        {STEPS.map((s, i) => (
+          <Reveal key={s.k} delay={i * 90}>
+            <div style={{ position: "relative", padding: "0 18px 0 0" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 52, height: 52, borderRadius: "var(--radius-lg)", background: "var(--primary-wash)", color: "var(--primary)", marginBottom: 14 }}>
+                <Icon name={s.icon} size={24} color="var(--primary)" />
+              </div>
+              <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--ink-muted)" }}>{s.k}</div>
+              <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 19, color: "var(--ink)", margin: "2px 0 6px", letterSpacing: "-0.01em" }}>{s.t}</div>
+              <p style={{ fontFamily: "var(--font-ui)", fontSize: 13.5, lineHeight: 1.45, color: "var(--ink-muted)", margin: 0, paddingRight: 8 }}>{s.d}</p>
+              {i < STEPS.length - 1 && (
+                <div style={{ position: "absolute", right: 8, top: 18, color: "var(--accent)" }}><Icon name="arrowRight" size={18} color="var(--accent)" /></div>
+              )}
+            </div>
+          </Reveal>
+        ))}
+      </div>
 
-      <Section title="2. Spectral indices">
-        <p>
-          For each monthly composite, clipped to each lake polygon, we compute
-          three normalized-difference indices over the four analytics bands
-          (<Mono>B3</Mono> Green, <Mono>B4</Mono> Red, <Mono>B8</Mono> NIR,
-          <Mono> B11</Mono> SWIR):
-        </p>
-        <ul className="list-disc pl-5 mt-2 space-y-1">
-          <li><Mono>NDWI = (Green − NIR) / (Green + NIR)</Mono> — water presence</li>
-          <li><Mono>NDVI = (NIR − Red) / (NIR + Red)</Mono> — vegetation/algae proxy</li>
-          <li><Mono>NDTI = (SWIR − Red) / (SWIR + Red)</Mono> — turbidity proxy</li>
-        </ul>
-        <p className="mt-2">
-          A water mask (<Mono>NDWI &gt; 0</Mono>) is applied before reducing each
-          index over the polygon, so scores reflect lit water pixels only.
-        </p>
-      </Section>
+      <H2>The three indices</H2>
+      <P>
+        For each monthly composite, clipped to the lake polygon, we compute three normalized-difference
+        indices over the analytics bands and reduce them over lit water pixels only (<Mono>NDWI &gt; 0</Mono>):
+      </P>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14, marginBottom: 28 }}>
+        {[["NDWI", "(Green − NIR) / (Green + NIR)", "Water presence"],
+          ["NDVI", "(NIR − Red) / (NIR + Red)", "Vegetation / algae"],
+          ["NDTI", "(SWIR − Red) / (SWIR + Red)", "Turbidity"]].map(([n, f, d]) => (
+          <Card key={n} variant="panel" style={{ padding: 16 }}>
+            <div style={{ fontFamily: "var(--font-mono)", fontSize: 15, fontWeight: 600, color: "var(--primary-ink)" }}>{n}</div>
+            <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--ink-muted)", margin: "8px 0", lineHeight: 1.5 }}>{f}</div>
+            <Tag tone="teal">{d}</Tag>
+          </Card>
+        ))}
+      </div>
 
-      <Section title="3. Pollution score (0–100)">
-        <p>
-          Each index is linearly normalized from its theoretical <Mono>[−1, +1]</Mono> range
-          to <Mono>[0, 1]</Mono>, with NDWI inverted (less water = higher pollution).
-          The final score is a weighted sum, clamped to <Mono>[0, 100]</Mono>:
-        </p>
-        <pre className="mt-2 p-3 rounded border border-border bg-surface font-mono text-[12px] overflow-x-auto">
-{`score = 100 · clamp(
-    0.35 · (1 − ndwi_norm)   // less water
-  + 0.25 · ndvi_norm         // more vegetation/algae
-  + 0.40 · ndti_norm         // more turbidity
-)`}
-        </pre>
-        <p className="mt-2 text-fg-muted text-[13px]">
-          Weights are chosen to emphasize turbidity (sediment/effluent) while
-          still penalizing eutrophic greening and surface shrinkage.
-        </p>
-      </Section>
+      <H2>Weighting the score</H2>
+      <P>Each index is normalised to <Mono>[0,1]</Mono> (NDWI inverted — less water means more pollution), then combined as a weighted sum and clamped to <Mono>[0,100]</Mono>. Turbidity carries the most weight:</P>
+      <div style={{ display: "flex", height: 44, borderRadius: "var(--radius-pill)", overflow: "hidden", marginBottom: 12, border: "1px solid var(--border-hairline)" }}>
+        {WEIGHTS.map((w) => (
+          <div key={w.label} style={{ width: `${w.w}%`, background: w.color, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontFamily: "var(--font-mono)", fontSize: 13, fontWeight: 600 }}>{w.w}%</div>
+        ))}
+      </div>
+      <div style={{ display: "flex", gap: 18, flexWrap: "wrap", marginBottom: 28 }}>
+        {WEIGHTS.map((w) => (
+          <span key={w.label} style={{ display: "inline-flex", alignItems: "center", gap: 7, fontFamily: "var(--font-ui)", fontSize: 13, color: "var(--ink-muted)" }}>
+            <i style={{ width: 11, height: 11, borderRadius: 3, background: w.color }} />{w.label}
+          </span>
+        ))}
+      </div>
 
-      <Section title="4. Anomaly detection">
-        <p>
-          For each month we compute the month-over-month change in pollution
-          score. If the score increases by <Mono>MoM &gt; +20%</Mono>, that observation is flagged as an
-          anomaly. Flags surface on the dashboard and as red dots on the trend
-          chart so sudden spikes (e.g. untreated inflow, algal bloom) are
-          visually inescapable.
-        </p>
-      </Section>
-
-      <Section title='5. "Did restoration work?" verdict'>
-        <p>
-          When a lake has a dated restoration event on file, we compare the mean
-          pollution score in the six months <em>before</em> vs six months <em>after</em> the
-          event:
-        </p>
-        <ul className="list-disc pl-5 mt-2 space-y-1">
-          <li>post−pre ≤ −5 → <span className="text-pill-low">improved</span></li>
-          <li>post−pre ≥ +5 → <span className="text-pill-severe">worsened</span></li>
-          <li>otherwise → <span className="text-pill-mod">unchanged</span></li>
-          <li>no observations on either side → <span className="text-fg-muted">insufficient data</span></li>
-        </ul>
-        <p className="mt-2">
-          Confidence is <Mono>min(1, |post − pre| / 25)</Mono> — a 25-point swing
-          registers as fully confident.
-        </p>
-      </Section>
-
-      <Section title="6. Restoration data provenance">
-        <p>
-          Event dates and titles come from a hand-curated registry of BBMP
-          and Karnataka High Court announcements covering all 5 lakes in our database
-          (Bellandur, Varthur, Hebbal, Ulsoor, and Sankey Tank).
-          See <Mono>src/bangalore_lakes/data/restoration/restoration_events.json</Mono>.
-        </p>
-      </Section>
-
-      <Section title="Caveats">
-        <ul className="list-disc pl-5 space-y-1">
-          <li>
-            Monsoon months (Jun–Oct) can leave a lake with zero usable scenes —
-            these appear as gaps in the trend line, not zeroes.
-          </li>
-          <li>
-            The pollution score is a relative ranking, not a calibrated
-            concentration. A score of 70 does not mean "70 mg/L BOD".
-          </li>
-          <li>
-            Small lakes (Ulsoor, Sankey) have &lt; 100 pixel footprints; their
-            monthly means are noisier than Bellandur's.
-          </li>
-        </ul>
-      </Section>
-    </article>
-  );
-}
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section className="mb-6">
-      <h2 className="text-[11px] uppercase tracking-wider text-fg-muted mb-2">
-        {title}
-      </h2>
-      <div className="text-fg">{children}</div>
-    </section>
-  );
-}
-
-function Mono({ children }: { children: React.ReactNode }) {
-  return (
-    <code className="font-mono text-[12.5px] px-1 py-0.5 rounded bg-surface-2 text-fg">
-      {children}
-    </code>
+      <H2>Anomalies & the restoration verdict</H2>
+      <P>
+        A month-over-month jump of <Mono>&gt; +20%</Mono> is flagged as an anomaly (a coral dot on the trend line).
+        When a lake has a dated restoration event, we compare the mean score six months before vs after:
+      </P>
+      <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}><Mono>post − pre ≤ −5</Mono><Badge status="good">Improved</Badge></span>
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}><Mono>≥ +5</Mono><Badge status="critical">Worsened</Badge></span>
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}><Mono>otherwise</Mono><Badge status="caution">Unchanged</Badge></span>
+      </div>
+    </div>
   );
 }

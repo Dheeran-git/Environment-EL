@@ -1,254 +1,189 @@
 import { useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Compass, CheckCircle2 } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "../lib/api";
-import MetricStat from "../components/MetricStat";
-import ScorePill from "../components/ScorePill";
-import AnomalyBadge from "../components/AnomalyBadge";
-import VerdictCard from "../components/VerdictCard";
-import type { VerdictDetails } from "../components/VerdictCard";
-import TrendChart from "../components/TrendChart";
-import EventList from "../components/EventList";
-import { formatPct, formatScore } from "../lib/scoring";
-import SatelliteImagery from "../components/SatelliteImagery";
-import type { Lake } from "../lib/types";
-import { POLICIES } from "./Policies";
+import type { CitizenReport, Lake, MonthlyObservation } from "../lib/types";
+import {
+  coordsLabel, deriveTrend, headlineFor, monthLabel, pickLatest, wardLabel,
+} from "../lib/lakeui";
+import {
+  BandToggle, Button, Card, IncidentItem, Input, MetricStat, Select, Tag, TrendChart, VerdictCard,
+} from "../design/ds";
+import type { BandDef, TrendEvent, TrendPoint } from "../design/ds";
+import { Reveal } from "../design/motion";
+import { Icon } from "../design/icons";
+
+const BANDS: BandDef[] = [
+  { id: "rgb", label: "RGB", hint: "True colour" },
+  { id: "ndwi", label: "NDWI", hint: "Water" },
+  { id: "ndvi", label: "NDVI", hint: "Vegetation" },
+];
+const BAND_FALLBACK: Record<string, string> = {
+  rgb: "linear-gradient(135deg,#3a5a40 0%,#588157 35%,#a3b18a 70%,#dad7cd 100%)",
+  ndwi: "linear-gradient(135deg,#03045e 0%,#0077b6 45%,#00b4d8 75%,#90e0ef 100%)",
+  ndvi: "linear-gradient(135deg,#081c15 0%,#1b4332 40%,#40916c 70%,#95d5b2 100%)",
+};
+const BAND_NOTE: Record<string, string> = {
+  rgb: "True-colour composite — bunds, built edge and open water.",
+  ndwi: "NDWI water index — brighter = more open water surface.",
+  ndvi: "NDVI vegetation index — brighter = algae / aquatic plants.",
+};
+const INCIDENT_TYPES = [
+  { value: "Froth / foam overflow", label: "Froth / foam overflow" },
+  { value: "Solid-waste dumping", label: "Solid-waste dumping" },
+  { value: "Suspected discharge", label: "Suspected discharge" },
+  { value: "Fish die-off", label: "Fish die-off" },
+  { value: "Algal bloom", label: "Algal bloom" },
+];
+
+const API_BASE = (import.meta.env.VITE_API_BASE ?? "").replace(/\/+$/, "");
+function assetUrl(u: string | null | undefined): string | null {
+  if (!u) return null;
+  if (/^https?:\/\//.test(u)) return u;
+  return `${API_BASE}${u}`;
+}
+
+function SectionLabel({ children, action }: { children: React.ReactNode; action?: React.ReactNode }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, gap: 12, flexWrap: "wrap" }}>
+      <p style={{ fontFamily: "var(--font-ui)", fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--ink-muted)", margin: 0 }}>{children}</p>
+      {action}
+    </div>
+  );
+}
 
 export default function LakeDetail() {
   const { lakeId = "" } = useParams<{ lakeId: string }>();
+  const navigate = useNavigate();
+  const qc = useQueryClient();
+  const [band, setBand] = useState("ndwi");
+  const [form, setForm] = useState({ incident_type: INCIDENT_TYPES[0].value, description: "", reporter_name: "" });
 
   const lakesQuery = useQuery({ queryKey: ["lakes"], queryFn: api.getLakes });
-  const seriesQuery = useQuery({
-    queryKey: ["timeseries", lakeId],
-    queryFn: () => api.getTimeseries(lakeId),
-    retry: false,
-  });
-  const eventsQuery = useQuery({
-    queryKey: ["restoration", lakeId],
-    queryFn: () => api.getRestorationEvents(lakeId),
-    retry: false,
-  });
+  const seriesQuery = useQuery({ queryKey: ["timeseries", lakeId], queryFn: () => api.getTimeseries(lakeId), retry: false });
+  const eventsQuery = useQuery({ queryKey: ["restoration", lakeId], queryFn: () => api.getRestorationEvents(lakeId), retry: false });
+  const artifactsQuery = useQuery({ queryKey: ["artifacts", lakeId], queryFn: () => api.getLakeArtifacts(lakeId), retry: false });
+  const reportsQuery = useQuery({ queryKey: ["reports"], queryFn: api.getReports, retry: false });
 
-  const [selectedActions, setSelectedActions] = useState<string[]>([]);
-
-  const toggleAction = (id: string) => {
-    setSelectedActions(prev => 
-      prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id]
-    );
-  };
+  const createReport = useMutation({
+    mutationFn: (body: Omit<CitizenReport, "id" | "created_at">) => api.createReport(body),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["reports"] });
+      setForm({ incident_type: INCIDENT_TYPES[0].value, description: "", reporter_name: "" });
+    },
+  });
 
   const lake = lakesQuery.data?.lakes.find((l: Lake) => l.id === lakeId);
-  const rows = seriesQuery.data?.data ?? [];
-  const validRows = rows.filter((row: any) => row.pixel_count > 0);
-  const latest = useMemo(() => {
-    if (lakeId === "bellandur") {
-      return validRows.find((r: any) => r.month_start === "2025-02-01") ?? validRows[validRows.length - 1];
-    }
-    if (lakeId === "hebbal") {
-      return validRows.find((r: any) => r.month_start === "2026-02-01") ?? validRows[validRows.length - 1];
-    }
-    return validRows[validRows.length - 1];
-  }, [lakeId, validRows]);
+  const rows = (seriesQuery.data?.data ?? []) as MonthlyObservation[];
+  const validRows = rows.filter((r) => r.pixel_count > 0);
+  const latest = useMemo(() => pickLatest(lakeId, rows), [lakeId, rows]);
 
-  const prevObs = useMemo(() => {
-    if (!latest || !validRows.length) return null;
-    const idx = validRows.findIndex((r: any) => r.month_start === latest.month_start);
-    return idx > 0 ? validRows[idx - 1] : null;
-  }, [latest, validRows]);
+  const score = latest?.pollution_score ?? lake?.computed_pollution_score ?? 0;
+  const delta = latest?.mom_change_pct ?? null;
+  const trend = deriveTrend(delta);
 
-  const momMonthsText = useMemo(() => {
-    if (!latest || !prevObs) return "";
-    const formatMonthShort = (iso: string) => {
-      const d = new Date(iso + "T00:00:00");
-      const mon = d.toLocaleDateString("en-IN", { month: "short" });
-      const yr = d.getFullYear().toString().slice(2);
-      return `${mon}'${yr}`;
-    };
-    return `${formatMonthShort(prevObs.month_start)} → ${formatMonthShort(latest.month_start)}`;
-  }, [latest, prevObs]);
+  const trendData: TrendPoint[] = validRows.map((r) => ({
+    month: r.month_start.slice(0, 7), score: r.pollution_score, anomaly: r.anomaly_flag,
+  }));
+  const trendEvents: TrendEvent[] = (eventsQuery.data?.events ?? []).map((e) => ({
+    month: e.event_date.slice(0, 7), title: e.title,
+  }));
 
-  const events = eventsQuery.data?.events ?? [];
+  const incidents = (reportsQuery.data?.reports ?? []).filter((r) => r.lake_id === lakeId);
 
-  // Compute verdict details for VerdictCard
-  const verdictDetails: VerdictDetails | null = useMemo(() => {
-    if (events.length === 0 || validRows.length === 0) return null;
-    const lastEvent = events[events.length - 1];
-    const eventDate = lastEvent.event_date;
-    const pre = validRows.filter((r: any) => r.month_start < eventDate).slice(-6);
-    const post = validRows.filter((r: any) => r.month_start >= eventDate).slice(0, 6);
-    if (pre.length === 0 && post.length === 0) return null;
-    const preAvg = pre.length > 0 ? pre.reduce((s: number, r: any) => s + r.pollution_score, 0) / pre.length : 0;
-    const postAvg = post.length > 0 ? post.reduce((s: number, r: any) => s + r.pollution_score, 0) / post.length : 0;
-    return {
-      eventDate,
-      eventTitle: lastEvent.title,
-      preMonths: pre.map((r: any) => r.month_start),
-      postMonths: post.map((r: any) => r.month_start),
-      preAvg,
-      postAvg,
-    };
-  }, [events, validRows]);
+  const bandImage = assetUrl(
+    band === "rgb" ? artifactsQuery.data?.thumb_url
+      : band === "ndwi" ? artifactsQuery.data?.thumb_ndwi_url
+        : artifactsQuery.data?.thumb_ndvi_url,
+  );
 
-  const totalImpact = selectedActions.reduce((acc, actionId) => {
-    const action = POLICIES.find(p => p.id === actionId);
-    return acc + (action?.impact ?? 0);
-  }, 0);
+  if (lakesQuery.isLoading) {
+    return <div style={{ padding: 48, color: "var(--ink-muted)", fontFamily: "var(--font-ui)" }}>Loading…</div>;
+  }
+  if (!lake) {
+    return <div style={{ padding: 48, color: "var(--data-severe)", fontFamily: "var(--font-ui)" }}>Unknown lake: {lakeId}</div>;
+  }
 
   return (
-    <div className="p-6 max-w-[1400px] mx-auto">
-      <nav className="text-[12px] text-fg-muted mb-3 no-print">
-        <Link to="/" className="inline-flex items-center gap-1 hover:text-fg">
-          <ArrowLeft className="w-3.5 h-3.5" /> Dashboard
-        </Link>
-      </nav>
+    <div style={{ padding: "28px 32px 64px", maxWidth: 1180, margin: "0 auto" }}>
+      <button onClick={() => navigate("/")} style={{ display: "inline-flex", alignItems: "center", gap: 6, border: "none", background: "none", cursor: "pointer", fontFamily: "var(--font-ui)", fontSize: 14, color: "var(--primary-ink)", padding: 0, marginBottom: 18 }}>
+        <Icon name="chevronRight" size={15} style={{ transform: "rotate(180deg)" }} /> All lakes
+      </button>
 
-      {lakesQuery.isLoading ? (
-        <div className="text-fg-muted">Loading…</div>
-      ) : !lake ? (
-        <div className="text-pill-severe">Unknown lake: {lakeId}</div>
-      ) : (
-        <>
-          <header className="mb-5 flex flex-wrap items-start gap-3 justify-between">
-            <div>
-              <h1 className="text-2xl font-semibold tracking-tight">
-                {lake.name}
-              </h1>
-              <div className="text-fg-muted mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[12px]">
-                <span className="font-mono">id: {lake.id}</span>
-                {lake.alt_names.length > 0 && (
-                  <span>aka {lake.alt_names.join(", ")}</span>
-                )}
-                {lake.ward && <span>ward: {lake.ward}</span>}
-                {lake.official_area_ha && (
-                  <span className="font-mono">
-                    {lake.official_area_ha.toFixed(1)} ha
-                  </span>
-                )}
-              </div>
+      <div style={{ fontFamily: "var(--font-ui)", fontSize: 13, color: "var(--ink-muted)", marginBottom: 12 }}>{wardLabel(lake)}</div>
+
+      <VerdictCard lakeName={lake.name} score={score} headline={headlineFor(lake.name, score, trend)}
+        trend={trend} asOf={latest ? monthLabel(latest.month_start) : undefined} style={{ marginBottom: 22 }} />
+
+      <Card style={{ marginBottom: 22 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 24 }}>
+          <MetricStat label="Pollution score" value={score.toFixed(1)} unit="/100" delta={delta} />
+          <MetricStat label="Surface area" value={lake.official_area_ha != null ? lake.official_area_ha.toFixed(0) : "—"} unit="ha" />
+          <MetricStat label="NDWI (water)" value={latest ? latest.ndwi.toFixed(2) : "—"} size={28} />
+          <MetricStat label="Coordinates" value={coordsLabel(lake.centroid)} size={18} />
+        </div>
+      </Card>
+
+      <Reveal>
+        <div style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 22, alignItems: "start", marginBottom: 22 }}>
+          <Card>
+            <SectionLabel action={<Tag dotColor="var(--accent)">{trendEvents.length} restoration events</Tag>}>Monthly score</SectionLabel>
+            {trendData.length === 0 ? (
+              <p style={{ fontFamily: "var(--font-ui)", color: "var(--ink-muted)", fontSize: 14 }}>No analytics time series yet for this lake.</p>
+            ) : (
+              <TrendChart data={trendData} events={trendEvents} height={210} />
+            )}
+          </Card>
+          <Card>
+            <SectionLabel action={<BandToggle bands={BANDS} value={band} onChange={setBand} />}>Sentinel-2 imagery</SectionLabel>
+            <div style={{ position: "relative", borderRadius: "var(--radius-md)", overflow: "hidden", aspectRatio: "4/3", background: BAND_FALLBACK[band], transition: "background .5s var(--ease-water)" }}>
+              {bandImage && <img src={bandImage} alt={`${band} composite for ${lake.name}`} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />}
+              <span style={{ position: "absolute", left: 12, top: 12, fontFamily: "var(--font-mono)", fontSize: 11, color: "#fff", background: "rgba(16,42,47,0.55)", padding: "4px 9px", borderRadius: "var(--radius-pill)" }}>{band.toUpperCase()} · 10 m · EPSG:32643</span>
+              {!bandImage && <span style={{ position: "absolute", right: 12, bottom: 12, fontFamily: "var(--font-mono)", fontSize: 10, color: "rgba(255,255,255,0.85)" }}>SIMULATED CLIP</span>}
             </div>
-            <div className="flex items-center gap-2">
-              {latest?.anomaly_flag && <AnomalyBadge mom={latest.mom_change_pct} />}
-              <ScorePill score={latest?.pollution_score ?? lake.computed_pollution_score} />
+            <p style={{ fontFamily: "var(--font-ui)", fontSize: 13, color: "var(--ink-muted)", margin: "12px 0 0", lineHeight: 1.45 }}>{BAND_NOTE[band]}</p>
+          </Card>
+        </div>
+      </Reveal>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 22, alignItems: "start" }}>
+        <Card>
+          <SectionLabel action={<Tag tone="teal">{incidents.length} reports</Tag>}>Citizen incident reports</SectionLabel>
+          {incidents.length === 0 ? (
+            <p style={{ fontFamily: "var(--font-ui)", color: "var(--ink-muted)", fontSize: 14, margin: 0 }}>No reports yet — be the first to flag something.</p>
+          ) : (
+            <div style={{ marginTop: -4 }}>
+              {incidents.map((it) => (
+                <IncidentItem key={it.id} type={it.incident_type} description={it.description}
+                  reporter={it.reporter_name} when={new Date(it.created_at).toLocaleString("en-IN")}
+                  status={it.status} coords={it.lat != null && it.lon != null ? `${it.lat.toFixed(4)}, ${it.lon.toFixed(4)}` : undefined} />
+              ))}
             </div>
-          </header>
-
-          <section className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
-            <MetricStat
-              label="Latest score"
-              value={formatScore(latest?.pollution_score)}
-              hint={latest ? `for ${latest.month_start.slice(0, 7)}` : "no data"}
-            />
-            <MetricStat
-              label="MoM change"
-              value={formatPct(latest?.mom_change_pct ?? null)}
-              hint={momMonthsText ? `${momMonthsText}${latest?.anomaly_flag ? " (anomaly)" : ""}` : (latest?.anomaly_flag ? "flagged anomaly" : "within normal range")}
-              tone={latest?.anomaly_flag ? "default" : "muted"}
-            />
-            <MetricStat
-              label="Months observed"
-              value={rows.length}
-              hint={rows.length > 0 ? `since ${rows[0].month_start.slice(0, 7)}` : undefined}
-            />
-          </section>
-
-          <section className="mb-5">
-            <VerdictCard
-              verdict={latest?.restoration_verdict ?? null}
-              confidence={latest?.restoration_confidence ?? null}
-              hasEvents={events.length > 0}
-              details={verdictDetails}
-            />
-          </section>
-
-          <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-5">
-            <div className="lg:col-span-2">
-              <h2 className="text-[11px] uppercase tracking-wider text-fg-muted mb-2">
-                Pollution trend & Projections (2020 → now)
-              </h2>
-              {seriesQuery.isLoading ? (
-                <div className="rounded-lg border border-border bg-surface p-6 text-fg-muted text-center">
-                  Loading time series…
-                </div>
-              ) : seriesQuery.isError || rows.length === 0 ? (
-                <div className="rounded-lg border border-border bg-surface p-6 text-fg-muted text-center">
-                  No analytics time series yet. Run <code className="font-mono text-fg">bangalore-lakes compute-timeseries</code>.
-                </div>
-              ) : (
-                <TrendChart rows={rows} events={events} simulatedImpactPoints={totalImpact} />
-              )}
-            </div>
-
-            {/* Scenario Builder Panel */}
-            <div className="bg-surface border border-border rounded-xl p-5 flex flex-col justify-between h-fit no-print">
-              <div className="space-y-4">
-                <h3 className="text-[11px] uppercase tracking-wider text-fg-muted font-semibold flex items-center gap-1.5">
-                  <Compass className="w-4 h-4 text-accent" />
-                  Restoration Scenario Builder
-                </h3>
-                <p className="text-fg-muted text-[12.5px] leading-normal">
-                  Toggle active restoration policies below to simulate their cumulative impact on the lake's 36-month future recovery path.
-                </p>
-
-                <div className="space-y-2.5 max-h-[260px] overflow-y-auto scrollbar-thin pr-1">
-                  {POLICIES.map((p) => {
-                    const active = selectedActions.includes(p.id);
-                    return (
-                      <button
-                        key={p.id}
-                        onClick={() => toggleAction(p.id)}
-                        className={`w-full p-3 rounded-xl border text-left transition-all flex items-center justify-between gap-3 ${
-                          active 
-                            ? "bg-surface-2 border-accent/60 ring-1 ring-accent/30 shadow-sm" 
-                            : "bg-surface border-border hover:border-fg-muted/40 hover:bg-surface-2/40"
-                        }`}
-                      >
-                        <div className="flex-1 min-w-0">
-                          <div className="flex justify-between items-center gap-2">
-                            <span className={`text-[8.5px] uppercase tracking-wider px-1.5 py-0.25 rounded font-semibold ${
-                              p.category === "engineering" ? "bg-blue-500/10 text-blue-400 border border-blue-500/20" :
-                              p.category === "ecological" ? "bg-green-500/10 text-green-400 border border-green-500/20" :
-                              "bg-purple-500/10 text-purple-400 border border-purple-500/20"
-                            }`}>
-                              {p.category}
-                            </span>
-                            <span className="text-[10px] font-mono font-semibold text-accent shrink-0">+{p.impact} pts</span>
-                          </div>
-                          <h4 className="font-semibold text-[13px] mt-1.5 text-fg truncate">{p.name}</h4>
-                        </div>
-                        <div className={`w-4 h-4 rounded-full flex items-center justify-center border shrink-0 ${
-                          active ? "bg-accent border-accent text-bg" : "border-border"
-                        }`}>
-                          {active && <CheckCircle2 className="w-2.5 h-2.5 text-bg-default stroke-[3px]" />}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="border-t border-border/60 mt-4 pt-3 flex items-center justify-between">
-                <span className="text-[12px] font-medium text-fg">Cumulative Impact:</span>
-                <span className="text-[13px] font-bold font-mono text-accent">+{totalImpact} Impact Points</span>
-              </div>
-            </div>
-          </section>
-
-          <section className="mb-5 no-print">
-        <h2 className="text-[11px] uppercase tracking-wider text-fg-muted mb-2">
-          Satellite Remote Sensing Band Analysis
-        </h2>
-        <SatelliteImagery lakeId={lakeId} />
-      </section>
-
-          <section>
-            <h2 className="text-[11px] uppercase tracking-wider text-fg-muted mb-2">
-              Restoration events
-            </h2>
-            <EventList events={events} />
-          </section>
-        </>
-      )}
+          )}
+        </Card>
+        <Card variant="accent">
+          <SectionLabel>Report an incident</SectionLabel>
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            <Select label="Incident type" options={INCIDENT_TYPES} value={form.incident_type}
+              onChange={(e) => setForm((f) => ({ ...f, incident_type: e.target.value }))} />
+            <Input label="What did you see?" placeholder="A short description…" value={form.description}
+              onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))} />
+            <Input label="Your name" placeholder="e.g. Asha R." value={form.reporter_name}
+              onChange={(e) => setForm((f) => ({ ...f, reporter_name: e.target.value }))} />
+            <Button variant="primary" icon={<Icon name="flag" size={15} color="#fff" />}
+              disabled={createReport.isPending || !form.description.trim() || !form.reporter_name.trim()}
+              onClick={() => createReport.mutate({
+                lake_id: lakeId, incident_type: form.incident_type, description: form.description,
+                reporter_name: form.reporter_name, lat: lake.centroid?.[1] ?? null, lon: lake.centroid?.[0] ?? null,
+                status: "pending",
+              })}>
+              {createReport.isPending ? "Submitting…" : "Submit report"}
+            </Button>
+            {createReport.isSuccess && <span style={{ fontFamily: "var(--font-ui)", fontSize: 13, color: "var(--data-pristine)" }}>Thanks — your report was logged.</span>}
+            {createReport.isError && <span style={{ fontFamily: "var(--font-ui)", fontSize: 13, color: "var(--data-high)" }}>Couldn't submit. Try again.</span>}
+          </div>
+        </Card>
+      </div>
     </div>
   );
 }
