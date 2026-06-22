@@ -160,7 +160,7 @@ def fetch_lakes_cmd(
 @app.command("serve")
 def serve_cmd(
     host: str = typer.Option("127.0.0.1", "--host", help="Bind address."),
-    port: int = typer.Option(8000, "--port", help="TCP port."),
+    port: int = typer.Option(8082, "--port", help="TCP port."),
     reload: bool = typer.Option(False, "--reload", help="Auto-reload on code changes (dev)."),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable debug logging."),
 ) -> None:
